@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Глоссарий — ЭРТ по Red Expert</title>
+  <meta name="description" content="Глоссарий электронной рабочей тетради по Red Expert: JDBC, DDL, DML, ER-диаграмма, трассировка, reverse engineering и другие термины.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    .glossary-search {
+      position: sticky;
+      top: 70px;
+      z-index: 20;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .glossary-search input[type="search"] {
+      flex: 1;
+      min-width: 0;
+      padding: 0.55rem 0.85rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .glossary-search input[type="search"]:focus {
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .glossary-search .clear-btn {
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      background: #fff;
+      color: var(--green-800);
+      border-color: var(--green-300);
+    }
+    .glossary-search .clear-btn:hover {
+      background: var(--green-50);
+    }
+
+    .alphabet-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      margin-bottom: 1.5rem;
+      padding: 0.5rem 0.75rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .alphabet-nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 30px;
+      padding: 0 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--green-800);
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .alphabet-nav a:hover {
+      background: var(--green-100);
+      border-color: var(--green-500);
+    }
+    .alphabet-nav a.group-latin {
+      background: var(--green-800);
+      color: #fff;
+      border-color: var(--green-800);
+    }
+    .alphabet-nav a.group-latin:hover {
+      background: var(--green-600);
+      border-color: var(--green-600);
+    }
+
+    .letter-header {
+      margin: 1.75rem 0 0.75rem;
+      padding-bottom: 0.35rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--green-800);
+      border-bottom: 2px solid var(--green-200);
+      scroll-margin-top: 80px;
+    }
+
+    .glossary-item {
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 0.75rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--green-300);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+      scroll-margin-top: 130px;
+    }
+    .glossary-item:hover {
+      border-left-color: var(--green-600);
+      box-shadow: var(--shadow);
+    }
+    .glossary-item.key-term {
+      background: var(--green-50);
+      border-left-color: var(--green-700);
+      border-color: var(--green-200);
+    }
+    .glossary-item h3 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 0.4rem;
+      font-size: 1.05rem;
+      color: var(--green-900);
+    }
+    .glossary-tag {
+      padding: 0.1rem 0.55rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--green-700);
+      border-radius: 999px;
+    }
+    .glossary-item p {
+      margin: 0 0 0.5rem;
+      font-size: 0.94rem;
+    }
+    .glossary-item p:last-child {
+      margin-bottom: 0;
+    }
+    .glossary-related {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .glossary-related a {
+      color: var(--green-700);
+      border-bottom: 1px dashed var(--green-300);
+    }
+    .glossary-related a:hover {
+      border-bottom-color: var(--green-600);
+      text-decoration: none;
+    }
+    .empty-state {
+      display: none;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      background: var(--bg-soft);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+    }
+    .empty-state.visible {
+      display: block;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 0 0 1.5rem;
+      padding: 0.6rem 1rem;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      background: var(--bg-soft);
+      border: 1px dashed var(--green-200);
+      border-radius: var(--radius-sm);
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legend .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      border-left: 4px solid var(--green-700);
+      background: var(--green-50);
+    }
+    .legend .dot.plain {
+      border-left-color: var(--green-300);
+      background: #fff;
+    }
+    @media (max-width: 640px) {
+      .glossary-search {
+        top: 0;
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        border-left: none;
+        border-right: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules">Модули</a>
+      <a href="../index.html#appendices" class="active">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="../modules/module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="../modules/module2.html">2. Подключение к БД</a></li>
+        <li><a href="../modules/module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="../modules/module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="../modules/module5.html">5. Объекты БД</a></li>
+        <li><a href="../modules/module6.html">6. ER-диаграммы</a></li>
+        <li><a href="../modules/module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="../modules/module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="../modules/module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="glossary.html" class="active">Глоссарий</a></li>
+        <li><a href="reference.html">Горячие клавиши</a></li>
+        <li><a href="checklist.html">Чек-лист</a></li>
+        <li><a href="criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#appendices">Приложения</a> →
+        Глоссарий
+      </nav>
+
+      <h1>Глоссарий</h1>
+      <p style="color: var(--text-muted); max-width: 780px;">
+        Основные термины, которые встречаются в модулях тетради.
+        Ключевые понятия выделены зелёным. Используйте поиск или навигацию
+        по буквам, чтобы быстро найти нужное определение.
+      </p>
+
+      <!-- ================= Поиск ================= -->
+      <div class="glossary-search">
+        <input type="search" id="glossary-search"
+               placeholder="Поиск по термину или определению…"
+               aria-label="Поиск по глоссарию" autocomplete="off">
+        <button type="button" class="clear-btn" id="glossary-clear" aria-label="Очистить поиск">
+          Очистить
+        </button>
+      </div>
+
+      <!-- ================= Легенда ================= -->
+      <div class="legend">
+        <span><span class="dot"></span> ключевой термин тетради</span>
+        <span><span class="dot plain"></span> дополнительный термин</span>
+      </div>
+
+      <!-- ================= Навигация по буквам ================= -->
+      <nav class="alphabet-nav" aria-label="Навигация по алфавиту">
+        <a href="#latin" class="group-latin" title="Латинские термины">A–Z</a>
+        <a href="#letter-a">А</a>
+        <a href="#letter-b">Б</a>
+        <a href="#letter-v">В</a>
+        <a href="#letter-g">Г</a>
+        <a href="#letter-d">Д</a>
+        <a href="#letter-i">И</a>
+        <a href="#letter-n">Н</a>
+        <a href="#letter-p">П</a>
+        <a href="#letter-r">Р</a>
+        <a href="#letter-s">С</a>
+        <a href="#letter-t">Т</a>
+      </nav>
+
+      <!-- ================= Пустое состояние ================= -->
+      <div class="empty-state" id="glossary-empty">
+        По вашему запросу ничего не найдено. Попробуйте другой термин
+        или <a href="#" id="glossary-reset">сбросьте поиск</a>.
+      </div>
+
+      <!-- ================= Латиница ================= -->
+      <h2 class="letter-header" id="latin">Латинские термины</h2>
+
+      <article class="glossary-item" id="csv" data-term="CSV">
+        <h3>CSV <span class="glossary-tag">данные</span></h3>
+        <p>
+          <strong>Comma-Separated Values</strong> — текстовый формат табличных
+          данных, в котором столбцы разделены запятой или точкой с запятой.
+          Удобен для обмена с Excel и другими таблицами, но не хранит типы
+          данных и ограничения. Используется в модуле 8 при экспорте
+          результатов запросов.
+        </p>
+        <p class="glossary-related">См. также: <a href="#json">JSON</a>,
+          <a href="#ddl">DDL</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="dcl" data-term="DCL Data Control Language">
+        <h3>DCL (Data Control Language) <span class="glossary-tag">SQL</span></h3>
+        <p>
+          Подмножество SQL для управления правами доступа. Основные команды —
+          <code>GRANT</code> (выдать привилегию) и <code>REVOKE</code>
+          (отозвать). Применяется в модуле 7 при работе с ролями
+          и привилегиями.
+        </p>
+        <p class="glossary-related">См. также: <a href="#dml">DML</a>,
+          <a href="#ddl">DDL</a>, <a href="#privilege">Привилегия</a>,
+          <a href="#role">Роль</a>.</p>
+      </article>
+
+      <article class="glossary-item key-term" id="ddl" data-term="DDL Data Definition Language">
+        <h3>DDL (Data Definition Language) <span class="glossary-tag">ключевой термин</span></h3>
+        <p>
+          <strong>Data Definition Language</strong> — подмножество SQL для
+          определения и изменения структуры базы данных. Основные команды:
+          <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>.
+          DDL меняет схему (таблицы, индексы, триггеры, процедуры), но не
+          данные внутри таблиц. В Red Expert DDL-скрипты генерируются
+          автоматически из визуального редактора и из ER-диаграмм.
+        </p>
+        <p class="glossary-related">См. также: <a href="#dml">DML</a>,
+          <a href="#dcl">DCL</a>, <a href="#er-diagram">ER-диаграмма</a>.</p>
+      </article>
+
+      <article class="glossary-item key-term" id="dml" data-term="DML Data Manipulation Language SELECT INSERT UPDATE DELETE">
+        <h3>DML (Data Manipulation Language) <span class="glossary-tag">ключевой термин</span></h3>
+        <p>
+          <strong>Data Manipulation Language</strong> — подмножество SQL для
+          работы с данными: <code>SELECT</code> (чтение), <code>INSERT</code>
+          (вставка), <code>UPDATE</code> (обновление), <code>DELETE</code>
+          (удаление). В отличие от DDL, DML не меняет структуру базы данных.
+          Основная часть работы в редакторе SQL-запросов — именно DML.
+        </p>
+        <p class="glossary-related">См. также: <a href="#ddl">DDL</a>,
+          <a href="#dcl">DCL</a>, <a href="#sql">SQL</a>.</p>
+      </article>
+
+      <article class="glossary-item key-term" id="er-diagram" data-term="ER-диаграмма Entity-Relationship сущность связь">
+        <h3>ER-диаграмма <span class="glossary-tag">ключевой термин</span></h3>
+        <p>
+          <strong>Entity-Relationship diagram</strong> — графическое
+          представление структуры базы данных: сущности (таблицы) и связи
+          между ними (1:1, 1:N, N:M). ER-диаграмма помогает спроектировать
+          схему до создания объектов. В Red Expert строится через встроенный
+          построитель — как «с нуля», так и методом reverse engineering.
+        </p>
+        <p class="glossary-related">См. также: <a href="#reverse-engineering">Reverse engineering</a>,
+          <a href="#entity">Сущность</a>, <a href="#relation">Связь</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="firebird" data-term="Firebird СУБД">
+        <h3>Firebird <span class="glossary-tag">СУБД</span></h3>
+        <p>
+          Открытая реляционная система управления базами данных с
+          многоверсионной архитектурой. Red Expert изначально создавался
+          как инструмент именно для Firebird; также поддерживает её
+          российский форк — Ред База Данных.
+        </p>
+        <p class="glossary-related">См. также: <a href="#red-db">Ред База Данных</a>,
+          <a href="#red-expert">Red Expert</a>, <a href="#jaybird">Jaybird</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="jaybird" data-term="Jaybird JDBC драйвер">
+        <h3>Jaybird <span class="glossary-tag">JDBC-драйвер</span></h3>
+        <p>
+          JDBC-драйвер для Firebird и Ред База Данных. Именно через Jaybird
+          Red Expert подключается к серверу СУБД. Версия драйвера должна
+          соответствовать версии JDK и, в некоторых случаях, версии сервера.
+        </p>
+        <p class="glossary-related">См. также: <a href="#jdbc">JDBC</a>,
+          <a href="#firebird">Firebird</a>.</p>
+      </article>
+
+      <article class="glossary-item key-term" id="jdbc" data-term="JDBC Java Database Connectivity">
+        <h3>JDBC <span class="glossary-tag">ключевой термин</span></h3>
+        <p>
+          <strong>Java Database Connectivity</strong> — стандартный Java-API
+          для доступа к реляционным СУБД. Программа на Java (в том числе
+          Red Expert) через JDBC-драйвер отправляет SQL-запросы на сервер
+          и получает результаты. Параметры JDBC-подключения (хост, порт,
+          путь к файлу БД, кодировка) задаются в окне создания подключения.
+        </p>
+        <p class="glossary-related">См. также: <a href="#jaybird">Jaybird</a>,
+          <a href="#red-expert">Red Expert</a>, <a href="#sql">SQL</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="json" data-term="JSON">
+        <h3>JSON <span class="glossary-tag">данные</span></h3>
+        <p>
+          <strong>JavaScript Object Notation</strong> — текстовый формат
+          обмена данными вида «ключ — значение». В тетради JSON используется
+          как резервная копия ответов: кнопка <em>«Экспорт JSON»</em>
+          сохраняет все введённые ответы и отметки о выполнении в файл.
+        </p>
+        <p class="glossary-related">См. также: <a href="#csv">CSV</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="red-expert" data-term="Red Expert">
+        <h3>Red Expert <span class="glossary-tag">инструмент</span></h3>
+        <p>
+          Кроссплатформенная GUI-оболочка на Java для администрирования
+          и разработки в Firebird и Ред База Данных. Предоставляет визуальный
+          редактор объектов, SQL-редактор, построитель ER-диаграмм,
+          Trace Manager, менеджеры пользователей и прав.
+        </p>
+        <p class="glossary-related">См. также: <a href="#firebird">Firebird</a>,
+          <a href="#red-db">Ред База Данных</a>, <a href="#trace-manager">Trace Manager</a>.</p>
+      </article>
+
+      <article class="glossary-item key-term" id="reverse-engineering" data-term="reverse engineering обратное проектирование">
+        <h3>Reverse engineering <span class="glossary-tag">ключевой термин</span></h3>
+        <p>
+          Обратное проектирование — построение ER-диаграммы по уже
+          существующей базе данных. Инструмент считывает метаданные
+          (таблицы, поля, ключи, связи) и автоматически рисует схему.
+          Обратный процесс — генерация DDL-скрипта из диаграммы.
+        </p>
+        <p class="glossary-related">См. также: <a href="#er-diagram">ER-диаграмма</a>,
+          <a href="#ddl">DDL</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="sql" data-term="SQL Structured Query Language">
+        <h3>SQL <span class="glossary-tag">язык</span></h3>
+        <p>
+          <strong>Structured Query Language</strong> — стандартный язык
+          работы с реляционными базами данных. Включает подмножества DDL,
+          DML и DCL. В Red Expert SQL-запросы пишутся в редакторе запросов
+          и выполняются через панель инструментов.
+        </p>
+        <p class="glossary-related">См. также: <a href="#ddl">DDL</a>,
+          <a href="#dml">DML</a>, <a href="#dcl">DCL</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="ssh" data-term="SSH-туннель Secure Shell">
+        <h3>SSH-туннель <span class="glossary-tag">сеть</span></h3>
+        <p>
+          Защищённый канал через SSH, позволяющий подключаться к удалённой
+          СУБД без прямого доступа к её порту в интернете. Параметры
+          SSH-туннеля настраиваются в расширенных настройках подключения
+          Red Expert.
+        </p>
+        <p class="glossary-related">См. также: <a href="#jdbc">JDBC</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="trace-manager" data-term="Trace Manager трассировка">
+        <h3>Trace Manager <span class="glossary-tag">администрирование</span></h3>
+        <p>
+          Компонент Red Expert для трассировки действий в базе данных
+          в реальном времени. Позволяет создавать сессии трассировки,
+          фильтровать события и сохранять журнал для анализа.
+        </p>
+        <p class="glossary-related">См. также: <a href="#trace">Трассировка</a>.</p>
+      </article>
+
+      <!-- ================= Кириллица ================= -->
+      <h2 class="letter-header" id="letter-a">А</h2>
+
+      <article class="glossary-item" id="attribute" data-term="Атрибут поле столбец">
+        <h3>Атрибут <span class="glossary-tag">проектирование</span></h3>
+        <p>
+          Поле (столбец) сущности или таблицы. На ER-диаграмме атрибуты
+          перечисляются внутри сущности; при создании таблицы каждый атрибут
+          превращается в столбец с типом данных и, при необходимости,
+          ограничениями.
+        </p>
+        <p class="glossary-related">См. также: <a href="#entity">Сущность</a>,
+          <a href="#table">Таблица</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-b">Б</h2>
+
+      <article class="glossary-item" id="db" data-term="База данных БД">
+        <h3>База данных <span class="glossary-tag">основы</span></h3>
+        <p>
+          Организованная совокупность данных и метаданных, управляемая СУБД.
+          Физически в Firebird — это файл с расширением <code>.fdb</code>.
+          В Red Expert к одной базе данных может быть открыто несколько
+          подключений, а к разным базам — одновременно.
+        </p>
+        <p class="glossary-related">См. также: <a href="#dbms">СУБД</a>,
+          <a href="#firebird">Firebird</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-v">В</h2>
+
+      <article class="glossary-item" id="fk" data-term="Внешний ключ FOREIGN KEY ссылочная целостность">
+        <h3>Внешний ключ (FOREIGN KEY) <span class="glossary-tag">ограничение</span></h3>
+        <p>
+          Ограничение, обеспечивающее ссылочную целостность: значения
+          в дочерней таблице должны соответствовать значениям первичного
+          ключа в родительской. Пример: <code>STUDENT.GROUP_ID</code>
+          ссылается на <code>GROUP.ID</code>. Нарушение внешнего ключа
+          приводит к ошибке при вставке или удалении.
+        </p>
+        <p class="glossary-related">См. также: <a href="#pk">Первичный ключ</a>,
+          <a href="#table">Таблица</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-g">Г</h2>
+
+      <article class="glossary-item" id="generator" data-term="Генератор SEQUENCE автоинкремент">
+        <h3>Генератор <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Объект базы данных, возвращающий уникальные числа по запросу.
+          Используется для автоинкрементных первичных ключей. В Firebird
+          генератор вызывается через <code>GEN_ID(имя_генератора, шаг)</code>.
+        </p>
+        <p class="glossary-related">См. также: <a href="#pk">Первичный ключ</a>,
+          <a href="#trigger">Триггер</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-d">Д</h2>
+
+      <article class="glossary-item" id="domain" data-term="Домен DOMAIN пользовательский тип">
+        <h3>Домен (DOMAIN) <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Именованный пользовательский тип данных с набором ограничений
+          (<code>CHECK</code>, <code>NOT NULL</code>, значение по умолчанию).
+          Позволяет один раз описать типовое поле и переиспользовать его
+          в разных таблицах.
+        </p>
+        <p class="glossary-related">См. также: <a href="#table">Таблица</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-i">И</h2>
+
+      <article class="glossary-item" id="index" data-term="Индекс INDEX ускорение поиска">
+        <h3>Индекс (INDEX) <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Структура, ускоряющая поиск и сортировку по одному или нескольким
+          столбцам. Создаётся по полям, которые часто используются
+          в <code>WHERE</code> и <code>JOIN</code>. Сравнение стоимости
+          запроса до и после создания индекса — практика модулей 4 и 5.
+        </p>
+        <p class="glossary-related">См. также: <a href="#table">Таблица</a>,
+          <a href="#ddl">DDL</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="exception" data-term="Исключение EXCEPTION PSQL">
+        <h3>Исключение (EXCEPTION) <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Именованное сообщение об ошибке в PSQL (языке хранимых процедур
+          Firebird). Создаётся один раз и используется в триггерах
+          и процедурах через <code>EXCEPTION</code> и <code>WHEN</code>.
+        </p>
+        <p class="glossary-related">См. также: <a href="#trigger">Триггер</a>,
+          <a href="#procedure">Процедура хранимая</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-n">Н</h2>
+
+      <article class="glossary-item" id="normalization" data-term="Нормализация нормальные формы">
+        <h3>Нормализация <span class="glossary-tag">проектирование</span></h3>
+        <p>
+          Приведение схемы базы данных к нормальным формам (1НФ, 2НФ, 3НФ)
+          для устранения избыточности и аномалий обновления. На практике
+          означает разбиение данных на связанные таблицы вместо хранения
+          всего в одной.
+        </p>
+        <p class="glossary-related">См. также: <a href="#er-diagram">ER-диаграмма</a>,
+          <a href="#entity">Сущность</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-p">П</h2>
+
+      <article class="glossary-item" id="pk" data-term="Первичный ключ PRIMARY KEY">
+        <h3>Первичный ключ (PRIMARY KEY) <span class="glossary-tag">ограничение</span></h3>
+        <p>
+          Ограничение, однозначно идентифицирующее каждую строку таблицы.
+          Значения первичного ключа уникальны и не могут быть
+          <code>NULL</code>. Обычно используется с генератором для
+          автоинкремента.
+        </p>
+        <p class="glossary-related">См. также: <a href="#fk">Внешний ключ</a>,
+          <a href="#generator">Генератор</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="user" data-term="Пользователь USER учётная запись">
+        <h3>Пользователь (USER) <span class="glossary-tag">администрирование</span></h3>
+        <p>
+          Учётная запись в СУБД с именем и паролем. Пользователи создаются
+          в менеджере пользователей Red Expert. По умолчанию в Firebird
+          есть встроенный <code>SYSDBA</code> с максимальными правами.
+        </p>
+        <p class="glossary-related">См. также: <a href="#privilege">Привилегия</a>,
+          <a href="#role">Роль</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="view" data-term="Представление VIEW виртуальная таблица">
+        <h3>Представление (VIEW) <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Виртуальная таблица, построенная на основе <code>SELECT</code>-запроса.
+          Не хранит данные, а показывает их в удобном виде или ограничивает
+          доступ к части столбцов исходной таблицы.
+        </p>
+        <p class="glossary-related">См. также: <a href="#table">Таблица</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="privilege" data-term="Привилегия PRIVILEGE права доступ">
+        <h3>Привилегия (PRIVILEGE) <span class="glossary-tag">администрирование</span></h3>
+        <p>
+          Право на конкретную операцию с объектом БД: <code>SELECT</code>,
+          <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>,
+          <code>EXECUTE</code> и т.д. Выдаётся пользователю или роли
+          через <code>GRANT</code> и отзывается через <code>REVOKE</code>.
+        </p>
+        <p class="glossary-related">См. также: <a href="#role">Роль</a>,
+          <a href="#dcl">DCL</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="procedure" data-term="Процедура хранимая STORED PROCEDURE PSQL">
+        <h3>Процедура хранимая <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Программа на языке PSQL, хранимая в базе данных и вызываемая
+          по имени. Может принимать параметры и возвращать значения
+          (<code>RETURNS</code>). Используется для инкапсуляции логики,
+          которую удобно вызывать из разных мест.
+        </p>
+        <p class="glossary-related">См. также: <a href="#trigger">Триггер</a>,
+          <a href="#exception">Исключение</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-r">Р</h2>
+
+      <article class="glossary-item" id="red-db" data-term="Ред База Данных российская СУБД">
+        <h3>Ред База Данных <span class="glossary-tag">СУБД</span></h3>
+        <p>
+          Российская реляционная СУБД на основе Firebird, включённая
+          в реестр отечественного ПО. Red Expert поддерживает её наряду
+          с Firebird.
+        </p>
+        <p class="glossary-related">См. также: <a href="#firebird">Firebird</a>,
+          <a href="#red-expert">Red Expert</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="role" data-term="Роль ROLE набор привилегий">
+        <h3>Роль (ROLE) <span class="glossary-tag">администрирование</span></h3>
+        <p>
+          Именованный набор привилегий. Создаётся один раз, ей выдаются
+          права на объекты, а затем роль назначается нескольким
+          пользователям. Удобно, когда нужно раздать одинаковые права
+          группе учётных записей.
+        </p>
+        <p class="glossary-related">См. также: <a href="#privilege">Привилегия</a>,
+          <a href="#user">Пользователь</a>, <a href="#dcl">DCL</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-s">С</h2>
+
+      <article class="glossary-item" id="relation" data-term="Связь relationship 1:N N:M">
+        <h3>Связь <span class="glossary-tag">проектирование</span></h3>
+        <p>
+          Отношение между двумя сущностями. Основные типы: «один к одному»
+          (1:1), «один ко многим» (1:N), «многие ко многим» (N:M).
+          На физическом уровне 1:N реализуется через внешний ключ, N:M —
+          через промежуточную таблицу.
+        </p>
+        <p class="glossary-related">См. также: <a href="#entity">Сущность</a>,
+          <a href="#fk">Внешний ключ</a>, <a href="#er-diagram">ER-диаграмма</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="dbms" data-term="СУБД система управления базами данных">
+        <h3>СУБД <span class="glossary-tag">основы</span></h3>
+        <p>
+          Система управления базами данных — программное обеспечение,
+          которое хранит данные, обрабатывает запросы и обеспечивает
+          целостность и многопользовательский доступ. Примеры: Firebird,
+          Ред База Данных, PostgreSQL, MySQL.
+        </p>
+        <p class="glossary-related">См. также: <a href="#db">База данных</a>,
+          <a href="#firebird">Firebird</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="entity" data-term="Сущность entity таблица">
+        <h3>Сущность <span class="glossary-tag">проектирование</span></h3>
+        <p>
+          Объект предметной области, который на ER-диаграмме изображается
+          прямоугольником, а в базе данных превращается в таблицу.
+          Например: <em>Студент</em>, <em>Группа</em>, <em>Книга</em>.
+        </p>
+        <p class="glossary-related">См. также: <a href="#attribute">Атрибут</a>,
+          <a href="#relation">Связь</a>, <a href="#table">Таблица</a>.</p>
+      </article>
+
+      <h2 class="letter-header" id="letter-t">Т</h2>
+
+      <article class="glossary-item" id="table" data-term="Таблица TABLE">
+        <h3>Таблица (TABLE) <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Основная единица хранения данных в реляционной базе: строки
+          и столбцы с заданными типами и ограничениями. Создаётся
+          в Red Expert через визуальный редактор или DDL-скриптом.
+        </p>
+        <p class="glossary-related">См. также: <a href="#attribute">Атрибут</a>,
+          <a href="#pk">Первичный ключ</a>, <a href="#fk">Внешний ключ</a>.</p>
+      </article>
+
+      <article class="glossary-item key-term" id="trace" data-term="Трассировка trace мониторинг журнал">
+        <h3>Трассировка <span class="glossary-tag">ключевой термин</span></h3>
+        <p>
+          Режим мониторинга действий в базе данных в реальном времени:
+          выполняемые SQL-запросы, ошибки, подключения и отключения
+          пользователей. В Red Expert реализована через Trace Manager.
+          Создаёт нагрузку на сервер, поэтому включается на время учебной
+          задачи и выключается после.
+        </p>
+        <p class="glossary-related">См. также: <a href="#trace-manager">Trace Manager</a>,
+          <a href="#user">Пользователь</a>.</p>
+      </article>
+
+      <article class="glossary-item" id="trigger" data-term="Триггер TRIGGER BEFORE INSERT AFTER UPDATE">
+        <h3>Триггер (TRIGGER) <span class="glossary-tag">объект БД</span></h3>
+        <p>
+          Процедура на PSQL, автоматически выполняемая при событии
+          <code>INSERT</code>, <code>UPDATE</code> или <code>DELETE</code>.
+          Может срабатывать <code>BEFORE</code> (до изменения строки) или
+          <code>AFTER</code> (после). Типичные применения: авто-заполнение
+          полей, проверка ограничений, ведение истории изменений.
+        </p>
+        <p class="glossary-related">См. также: <a href="#procedure">Процедура хранимая</a>,
+          <a href="#generator">Генератор</a>, <a href="#exception">Исключение</a>.</p>
+      </article>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="../index.html">← На главную</a>
+        <a href="reference.html">Справочник горячих клавиш →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+
+  <!-- Локальный скрипт поиска по глоссарию -->
+  <script>
+    (function () {
+      'use strict';
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('glossary-search');
+        const clearBtn = document.getElementById('glossary-clear');
+        const resetLink = document.getElementById('glossary-reset');
+        const emptyState = document.getElementById('glossary-empty');
+        if (!input) return;
+
+        const items = Array.from(document.querySelectorAll('.glossary-item'));
+        const headers = Array.from(document.querySelectorAll('.letter-header'));
+
+        // Нормализация для поиска: нижний регистр, ё → е, без лишних пробелов
+        function norm(s) {
+          return (s || '').toLowerCase().replace(/ё/g, 'е').trim();
+        }
+
+        // Сохраняем «поисковый текст» каждого термина заранее
+        items.forEach(function (item) {
+          const term = item.getAttribute('data-term') || '';
+          const text = item.textContent || '';
+          item._searchText = norm(term + ' ' + text);
+        });
+
+        function applyFilter(q) {
+          const query = norm(q);
+          let visibleCount = 0;
+
+          items.forEach(function (item) {
+            const match = !query || item._searchText.indexOf(query) !== -1;
+            item.style.display = match ? '' : 'none';
+            if (match) visibleCount++;
+          });
+
+          // Скрываем заголовки букв, под которыми не осталось видимых терминов
+          headers.forEach(function (h) {
+            let next = h.nextElementSibling;
+            let any = false;
+            while (next && !next.classList.contains('letter-header')) {
+              if (next.classList.contains('glossary-item') &&
+                  next.style.display !== 'none') {
+                any = true;
+                break;
+              }
+              next = next.nextElementSibling;
+            }
+            h.style.display = any ? '' : 'none';
+          });
+
+          // Навигация по буквам тоже скрывается при активном поиске
+          const nav = document.querySelector('.alphabet-nav');
+          if (nav) nav.style.display = query ? 'none' : '';
+
+          emptyState.classList.toggle('visible', visibleCount === 0);
+        }
+
+        input.addEventListener('input', function () {
+          applyFilter(input.value);
+        });
+
+        clearBtn.addEventListener('click', function () {
+          input.value = '';
+          applyFilter('');
+          input.focus();
+        });
+
+        if (resetLink) {
+          resetLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            input.value = '';
+            applyFilter('');
+            input.focus();
+          });
+        }
+
+        // Подсветка термина при переходе по якорю
+        if (location.hash) {
+          const target = document.querySelector(location.hash);
+          if (target && target.classList.contains('glossary-item')) {
+            target.style.transition = 'background 0.6s ease';
+            const original = target.style.background;
+            target.style.background = 'var(--green-100)';
+            setTimeout(function () {
+              target.style.background = original || '';
+            }, 1600);
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Электронная рабочая тетрадь — Red Expert</title>
+  <meta name="description" content="Электронная рабочая тетрадь для освоения подключения к базе данных, SQL-запросов и работы с объектами БД в Red Expert.">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Небольшая локальная доработка: текстовые поля «Данные студента».
+       Основной style.css не трогаем — все остальные стили берутся из него. -->
+  <style>
+    .student-card input[type="text"] {
+      display: block;
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.55rem 0.75rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .student-card input[type="text"]:focus {
+      background: #fff;
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .appendix-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .appendix-grid a {
+      display: block;
+      padding: 0.85rem 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      color: var(--green-800);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .appendix-grid a:hover {
+      background: var(--green-100);
+      border-color: var(--green-500);
+      text-decoration: none;
+    }
+    .footer {
+      text-align: center;
+      padding: 1.5rem 1rem 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="index.html" class="active">Главная</a>
+      <a href="instructions.html">Инструкция</a>
+      <a href="#modules">Модули</a>
+      <a href="#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <!-- ================= Контент ================= -->
+  <div class="home-wrap" style="max-width: 1280px; margin: 0 auto; padding: 1.5rem;">
+    <main>
+
+      <!-- Hero -->
+      <section class="hero">
+        <span class="badge">Электронная рабочая тетрадь</span>
+        <h1>Red Expert: подключение, SQL-запросы и объекты БД</h1>
+        <p>
+          Практикум для студентов IT-направлений, начинающих администраторов
+          баз данных и разработчиков, переходящих на Firebird / Ред База Данных.
+          Заполняйте ответы, прикрепляйте скриншоты, следите за прогрессом
+          и сохраняйте отчёт в PDF.
+        </p>
+        <p style="margin-top: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center;">
+          <a class="btn" href="modules/module1.html">Начать обучение</a>
+          <a class="btn secondary" href="instructions.html">Как работать с тетрадью</a>
+        </p>
+      </section>
+
+      <!-- Характеристика -->
+      <section class="goal">
+        <h2>Общая характеристика рабочей тетради</h2>
+        <ul style="margin: 0.5rem 0 0 1.1rem; padding: 0;">
+          <li><strong>Целевая аудитория:</strong> студенты IT-направлений, начинающие администраторы БД, разработчики, переходящие на Firebird / Ред База Данных.</li>
+          <li><strong>Формат:</strong> электронная рабочая тетрадь с полями для ответов, вставкой скриншотов и сохранением результатов.</li>
+          <li><strong>Продолжительность:</strong> 12–16 академических часов.</li>
+          <li><strong>Ключевой принцип:</strong> не менее 50–60% времени — практическая работа непосредственно в Red Expert.</li>
+        </ul>
+      </section>
+
+      <!-- Данные студента -->
+      <section class="task student-card" style="margin-bottom: 1.5rem;">
+        <h2>Данные студента</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Заполните поля — они сохраняются в браузере и попадут в шапку отчёта
+          при экспорте JSON и печати PDF.
+        </p>
+        <label>ФИО
+          <input type="text" data-save="student_name" placeholder="Иванов Иван Иванович" autocomplete="name">
+        </label>
+        <label>Учебная группа
+          <input type="text" data-save="student_group" placeholder="ИС-21" autocomplete="off">
+        </label>
+      </section>
+
+      <!-- Общий прогресс -->
+      <section class="progress" data-global-progress>
+        <div class="progress-label">
+          <span>Выполнено</span>
+          <span>0 из 0 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </section>
+
+      <!-- Модули -->
+      <section id="modules" style="margin-top: 2rem;">
+        <h2 style="font-size: 1.3rem;">Модули тетради</h2>
+        <p style="color: var(--text-muted);">
+          Проходите модули по порядку — каждый следующий опирается на предыдущий.
+        </p>
+
+        <div class="module-grid">
+          <article class="module-card">
+            <span class="badge">Модуль 1</span>
+            <h3>Введение в Red Expert и подготовка рабочего места</h3>
+            <p>Установка, запуск, первичная настройка и знакомство с интерфейсом.</p>
+            <a class="btn secondary" href="modules/module1.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 2</span>
+            <h3>Подключение к базе данных</h3>
+            <p>Параметры подключения, SSH-туннель, диагностика типовых ошибок.</p>
+            <a class="btn secondary" href="modules/module2.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 3</span>
+            <h3>Обзор интерфейса и навигация по объектам</h3>
+            <p>Трёхпанельный интерфейс, дерево подключений, панели и горячие клавиши.</p>
+            <a class="btn secondary" href="modules/module3.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 4</span>
+            <h3>Редактор SQL-запросов</h3>
+            <p>SELECT, форматирование, автодополнение, параметры, план выполнения.</p>
+            <a class="btn secondary" href="modules/module4.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 5</span>
+            <h3>Работа с объектами БД через визуальный редактор</h3>
+            <p>Таблицы, индексы, триггеры, процедуры — без ручных DDL-скриптов.</p>
+            <a class="btn secondary" href="modules/module5.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 6</span>
+            <h3>Проектирование структуры БД с помощью ER-диаграмм</h3>
+            <p>Reverse engineering, ER-диаграмма, экспорт и сравнение схем.</p>
+            <a class="btn secondary" href="modules/module6.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 7</span>
+            <h3>Администрирование: пользователи, права, трассировка</h3>
+            <p>Создание пользователей, ролей, назначение привилегий, Trace Manager.</p>
+            <a class="btn secondary" href="modules/module7.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 8</span>
+            <h3>Импорт, экспорт и выполнение скриптов</h3>
+            <p>CSV/SQL-вставки, выполнение SQL-файлов, генерация DDL из метаданных.</p>
+            <a class="btn secondary" href="modules/module8.html">Открыть →</a>
+          </article>
+
+          <article class="module-card">
+            <span class="badge">Модуль 9</span>
+            <h3>Итоговый проект</h3>
+            <p>Комплексная разработка базы данных по выбранной предметной области.</p>
+            <a class="btn secondary" href="modules/module9.html">Открыть →</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- Приложения -->
+      <section id="appendices" style="margin-top: 2.5rem;">
+        <h2 style="font-size: 1.3rem;">Приложения</h2>
+        <p style="color: var(--text-muted);">
+          Справочные материалы для работы над заданиями и итоговым проектом.
+        </p>
+
+        <div class="appendix-grid">
+          <a href="appendices/glossary.html">📖 Глоссарий</a>
+          <a href="appendices/reference.html">⌨ Справочник горячих клавиш</a>
+          <a href="appendices/checklist.html">✅ Чек-лист самопроверки</a>
+          <a href="appendices/criteria.html">📊 Критерии оценивания</a>
+        </div>
+      </section>
+
+      <!-- Быстрые действия -->
+      <div class="actions" style="margin-top: 2rem;">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+    </main>
+
+    <footer class="footer">
+      Электронная рабочая тетрадь по Red Expert · 2026
+    </footer>
+  </div>
+
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

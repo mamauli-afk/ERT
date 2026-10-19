@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Чек-лист самопроверки — ЭРТ по Red Expert</title>
+  <meta name="description" content="Чек-лист самопроверки по модулям электронной рабочей тетради Red Expert: освоенные операции, возникшие ошибки и способы их решения.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    .intro-tip {
+      background: var(--green-50);
+      border-left: 4px solid var(--green-500);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.1rem;
+      margin: 0 0 1.5rem;
+      font-size: 0.92rem;
+    }
+    .intro-tip strong {
+      color: var(--green-800);
+    }
+
+    .module-check {
+      margin-bottom: 1.25rem;
+    }
+    .module-check .module-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+    .module-check h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--green-800);
+    }
+    .module-count {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--green-800);
+      background: var(--green-100);
+      border: 1px solid var(--green-200);
+      border-radius: 999px;
+      transition: background var(--transition), border-color var(--transition),
+                  color var(--transition);
+    }
+    .module-count.complete {
+      color: #fff;
+      background: var(--green-600);
+      border-color: var(--green-600);
+    }
+
+    .checklist-interactive {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem;
+    }
+    .checklist-interactive li {
+      display: flex;
+      padding: 0.5rem 0;
+      border-bottom: 1px dashed var(--green-200);
+    }
+    .checklist-interactive li:last-child {
+      border-bottom: none;
+    }
+
+    .task .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      font-size: 0.92rem;
+      font-weight: 400;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+    }
+    .task .check-item input[type="checkbox"] {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin-top: 0.15rem;
+      accent-color: var(--green-600);
+      cursor: pointer;
+    }
+    .task .check-item input[type="checkbox"]:checked + span {
+      color: var(--green-900);
+      text-decoration: line-through;
+      text-decoration-color: var(--green-300);
+    }
+
+    .errors-block {
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border);
+    }
+    .errors-block label {
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .module-check .module-head {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules">Модули</a>
+      <a href="../index.html#appendices" class="active">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="../modules/module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="../modules/module2.html">2. Подключение к БД</a></li>
+        <li><a href="../modules/module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="../modules/module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="../modules/module5.html">5. Объекты БД</a></li>
+        <li><a href="../modules/module6.html">6. ER-диаграммы</a></li>
+        <li><a href="../modules/module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="../modules/module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="../modules/module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="glossary.html">Глоссарий</a></li>
+        <li><a href="reference.html">Горячие клавиши</a></li>
+        <li><a href="checklist.html" class="active">Чек-лист</a></li>
+        <li><a href="criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#appendices">Приложения</a> →
+        Чек-лист самопроверки
+      </nav>
+
+      <h1>Чек-лист самопроверки по модулям</h1>
+      <p style="color: var(--text-muted); max-width: 780px;">
+        Отмечайте пункты, которые вы уверенно освоили, и фиксируйте возникшие
+        ошибки и способы их решения. Это не экзамен, а рабочий инструмент:
+        он поможет понять, к какому модулю стоит вернуться перед итоговым
+        проектом.
+      </p>
+
+      <div class="intro-tip">
+        <strong>Как пользоваться.</strong> Проходите модули по порядку.
+        После каждого модуля вернитесь сюда, отметьте освоенные операции
+        и, если что-то шло не так, зафиксируйте текст ошибки и найденное
+        решение. Все отметки и тексты сохраняются автоматически — их можно
+        распечатать в PDF или выгрузить в JSON вместе с остальными ответами
+        тетради.
+      </div>
+
+      <!-- ================= Общий прогресс ================= -->
+      <div class="progress" id="checklist-progress-box">
+        <div class="progress-label">
+          <span>Отмечено в чек-листе</span>
+          <span id="checklist-progress-text">0 из 0 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar" id="checklist-progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- ================= Модуль 1 ================= -->
+      <section class="task module-check" data-check-module="m1">
+        <div class="module-head">
+          <h2>Модуль 1. Введение в Red Expert</h2>
+          <span class="module-count">0 из 6</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m1_1"><span>Знаю, что такое Red Expert и для каких СУБД он предназначен</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m1_2"><span>Установил Red Expert и успешно запустил его</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m1_3"><span>Проверил версию JDK и при необходимости установил нужную</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m1_4"><span>Настроил интерфейс под себя (язык, шрифт, панели)</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m1_5"><span>Ориентируюсь в панели инструментов и знаю основные горячие клавиши</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m1_6"><span>Понимаю, какие объекты БД можно редактировать визуально</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m1_errors"
+                      placeholder="Например: при запуске — ошибка 'Java not found'"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m1_solutions"
+                      placeholder="Например: установил JDK 21 и прописал JAVA_HOME"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 2 ================= -->
+      <section class="task module-check" data-check-module="m2">
+        <div class="module-head">
+          <h2>Модуль 2. Подключение к базе данных</h2>
+          <span class="module-count">0 из 6</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m2_1"><span>Понимаю разницу между созданием новой БД и созданием подключения</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m2_2"><span>Знаю назначение каждого параметра подключения (сервер, путь, кодировка, драйвер)</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m2_3"><span>Умею создавать подключение к учебной БД и проверять его</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m2_4"><span>Могу диагностировать типовую ошибку подключения и устранить её</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m2_5"><span>Знаю, для чего используется SSH-туннель и когда он нужен</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m2_6"><span>Понимаю, что Red Expert поддерживает несколько одновременных подключений</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m2_errors"
+                      placeholder="Например: 'connection refused' при подключении к localhost:3050"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m2_solutions"
+                      placeholder="Например: проверил, что сервер Firebird запущен и порт 3050 не блокируется"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 3 ================= -->
+      <section class="task module-check" data-check-module="m3">
+        <div class="module-head">
+          <h2>Модуль 3. Обзор интерфейса и навигация</h2>
+          <span class="module-count">0 из 6</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m3_1"><span>Различаю три основные области интерфейса</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m3_2"><span>Знаю, какие панели можно открыть через меню «Вид»</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m3_3"><span>Умею перетаскивать и закреплять панели в рабочей области</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m3_4"><span>Ориентируюсь в дереве подключений и знаю основные типы объектов</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m3_5"><span>Знаю не менее 5 горячих клавиш для навигации и работы с вкладками</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m3_6"><span>Могу вернуть стандартное расположение панелей, если что-то потерялось</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m3_errors"
+                      placeholder="Например: случайно закрыл панель браузера БД и не мог найти"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m3_solutions"
+                      placeholder="Например: открыл через меню «Вид» → «Браузер баз данных»"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 4 ================= -->
+      <section class="task module-check" data-check-module="m4">
+        <div class="module-head">
+          <h2>Модуль 4. Редактор SQL-запросов</h2>
+          <span class="module-count">0 из 7</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_1"><span>Умею писать и выполнять простой SELECT</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_2"><span>Пользуюсь кнопкой форматирования и автодополнением (Ctrl+Space)</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_3"><span>Понимаю, как работают параметризованные запросы</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_4"><span>Различаю вкладку Result Set и панель Вывод</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_5"><span>Знаю, как включить отображение плана выполнения</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_6"><span>Понимаю, почему индекс снижает стоимость запроса</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m4_7"><span>Умею находить ранее выполненные запросы в истории</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m4_errors"
+                      placeholder="Например: 'Dynamic SQL Error: Token unknown' на запросе с JOIN"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m4_solutions"
+                      placeholder="Например: проверил, что перед JOIN не пропущена запятая и указан алиас таблицы"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 5 ================= -->
+      <section class="task module-check" data-check-module="m5">
+        <div class="module-head">
+          <h2>Модуль 5. Работа с объектами БД</h2>
+          <span class="module-count">0 из 7</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_1"><span>Умею создавать таблицу через визуальный редактор</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_2"><span>Понимаю разницу между CREATE и ALTER</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_3"><span>Умею добавлять поля и внешние ключи в существующую таблицу</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_4"><span>Знаю, как создать индекс и как оценить его эффект</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_5"><span>Умею создавать триггер BEFORE INSERT и проверять его работу</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_6"><span>Умею создавать и выполнять хранимую процедуру</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m5_7"><span>Сохраняю сгенерированные DDL-скрипты для отчёта</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m5_errors"
+                      placeholder="Например: 'violation of FOREIGN KEY constraint' при добавлении связи"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m5_solutions"
+                      placeholder="Например: убедился, что значение внешнего ключа существует в родительской таблице"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 6 ================= -->
+      <section class="task module-check" data-check-module="m6">
+        <div class="module-head">
+          <h2>Модуль 6. Проектирование структуры БД</h2>
+          <span class="module-count">0 из 6</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m6_1"><span>Понимаю, что такое ER-диаграмма и зачем она нужна</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m6_2"><span>Умею строить ER-диаграмму методом reverse engineering</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m6_3"><span>Умею создавать новую диаграмму «с нуля» и добавлять связи</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m6_4"><span>Могу экспортировать диаграмму в изображение (PNG/SVG)</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m6_5"><span>Умею генерировать DDL-скрипт из диаграммы</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m6_6"><span>Умею пользоваться инструментом сравнения метаданных</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m6_errors"
+                      placeholder="Например: диаграмма не строится — не выбрано подключение к БД"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m6_solutions"
+                      placeholder="Например: выбрал узел базы данных, а не отдельной таблицы, и запустил построитель заново"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 7 ================= -->
+      <section class="task module-check" data-check-module="m7">
+        <div class="module-head">
+          <h2>Модуль 7. Пользователи, права, трассировка</h2>
+          <span class="module-count">0 из 6</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m7_1"><span>Понимаю разницу между менеджером пользователей и менеджером прав</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m7_2"><span>Умею создавать пользователя и выдавать ему привилегии</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m7_3"><span>Умею проверять действие прав, подключаясь под новой учётной записью</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m7_4"><span>Понимаю, зачем нужны роли и как их назначать</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m7_5"><span>Умею включать трассировку и сохранять её журнал</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m7_6"><span>Помню о рисках трассировки и выключаю её после работы</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m7_errors"
+                      placeholder="Например: 'no permission for read/select access to table' под TEST_USER"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m7_solutions"
+                      placeholder="Например: выдал привилегию SELECT на таблицу или назначил роль READER"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 8 ================= -->
+      <section class="task module-check" data-check-module="m8">
+        <div class="module-head">
+          <h2>Модуль 8. Импорт, экспорт и скрипты</h2>
+          <span class="module-count">0 из 7</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_1"><span>Умею экспортировать результат SELECT в CSV</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_2"><span>Умею экспортировать результат SELECT в SQL-вставки (INSERT)</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_3"><span>Понимаю, чем отличаются форматы CSV и SQL</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_4"><span>Умею выполнять SQL-скрипт из файла</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_5"><span>Умею проверять результат выполнения скрипта через SELECT</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_6"><span>Умею генерировать полный DDL-скрипт из метаданных БД</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m8_7"><span>Сохранил DDL-скрипт как артефакт для итогового проекта</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m8_errors"
+                      placeholder="Например: 'violation of PRIMARY or UNIQUE KEY constraint' при выполнении INSERT-скрипта"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m8_solutions"
+                      placeholder="Например: заменил занятые ID на свободные значения или использовал генератор"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Модуль 9 ================= -->
+      <section class="task module-check" data-check-module="m9">
+        <div class="module-head">
+          <h2>Модуль 9. Итоговый проект</h2>
+          <span class="module-count">0 из 7</span>
+        </div>
+        <ul class="checklist-interactive">
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_1"><span>Выбрана предметная область, создана новая база данных</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_2"><span>Построена ER-диаграмма с 4+ сущностями и связями</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_3"><span>Созданы таблицы, первичные и внешние ключи, индексы</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_4"><span>Созданы и проверены хранимая процедура и триггер</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_5"><span>Таблицы наполнены тестовыми данными (главная — не менее 10 записей)</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_6"><span>Создан пользователь с ограниченными правами, ограничения проверены</span></label></li>
+          <li><label class="check-item"><input type="checkbox" data-progress="chk_m9_7"><span>Сгенерирован итоговый DDL-скрипт и сохранён файл</span></label></li>
+        </ul>
+        <div class="errors-block">
+          <label>Возникшие ошибки
+            <textarea data-save="chk_m9_errors"
+                      placeholder="Опишите сложности, с которыми столкнулись при выполнении итогового проекта"></textarea>
+          </label>
+          <label>Способы решения
+            <textarea data-save="chk_m9_solutions"
+                      placeholder="Опишите, как справились со сложностями или что планируете доработать"></textarea>
+          </label>
+        </div>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="reference.html">← Справочник горячих клавиш</a>
+        <a href="criteria.html">Критерии оценивания →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+
+  <!-- Локальный скрипт подсчёта прогресса чек-листа -->
+  <script>
+    (function () {
+      'use strict';
+
+      function updateProgress() {
+        // Общий прогресс
+        const boxes = document.querySelectorAll('[data-progress^="chk_"]');
+        const total = boxes.length;
+        const done = Array.prototype.filter.call(boxes, function (b) { return b.checked; }).length;
+        const percent = total ? Math.round((done / total) * 100) : 0;
+
+        const text = document.getElementById('checklist-progress-text');
+        const bar = document.getElementById('checklist-progress-bar');
+        if (text) text.textContent = done + ' из ' + total + ' (' + percent + '%)';
+        if (bar) bar.style.width = percent + '%';
+
+        // Прогресс по каждому модулю
+        document.querySelectorAll('[data-check-module]').forEach(function (section) {
+          const id = section.getAttribute('data-check-module');
+          const modBoxes = section.querySelectorAll('[data-progress^="chk_' + id + '_"]');
+          const modTotal = modBoxes.length;
+          const modDone = Array.prototype.filter.call(modBoxes, function (b) { return b.checked; }).length;
+          const counter = section.querySelector('.module-count');
+          if (counter) {
+            counter.textContent = modDone + ' из ' + modTotal;
+            if (modTotal > 0 && modDone === modTotal) {
+              counter.classList.add('complete');
+            } else {
+              counter.classList.remove('complete');
+            }
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // app.js уже восстановил состояния из localStorage к этому моменту,
+        // поэтому просто считаем актуальные значения.
+        updateProgress();
+
+        document.addEventListener('change', function (e) {
+          const t = e.target;
+          if (t && t.matches && t.matches('[data-progress^="chk_"]')) {
+            updateProgress();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

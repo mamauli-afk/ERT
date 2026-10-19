@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Критерии оценивания — ЭРТ по Red Expert</title>
+  <meta name="description" content="Критерии оценивания итогового проекта по Red Expert: полнота схемы, корректность связей, работа ограничений, качество отчёта.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    .intro-tip {
+      background: var(--green-50);
+      border-left: 4px solid var(--green-500);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.1rem;
+      margin: 0 0 1.5rem;
+      font-size: 0.92rem;
+    }
+    .intro-tip strong {
+      color: var(--green-800);
+    }
+
+    .max-score {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.1rem;
+      margin-bottom: 1.5rem;
+      background: var(--green-800);
+      color: #fff;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+    }
+    .max-score strong {
+      font-size: 1.35rem;
+    }
+    .max-score .hint {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      margin-left: auto;
+    }
+
+    .criteria-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 0 1.5rem;
+      font-size: 0.9rem;
+    }
+    .criteria-table thead {
+      background: var(--green-100);
+    }
+    .criteria-table th,
+    .criteria-table td {
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--border);
+    }
+    .criteria-table th {
+      color: var(--green-900);
+      font-weight: 700;
+    }
+    .criteria-table tbody tr:nth-child(even) {
+      background: var(--bg-soft);
+    }
+    .criteria-table tbody tr:hover {
+      background: var(--green-50);
+    }
+    .criteria-table td.score {
+      width: 90px;
+      text-align: center;
+      font-weight: 700;
+      color: var(--green-800);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+    }
+    .criteria-table td.criterion {
+      width: 30%;
+      font-weight: 600;
+      color: var(--green-900);
+    }
+    .criteria-table tfoot td {
+      background: var(--green-100);
+      font-weight: 700;
+      color: var(--green-900);
+      border-top: 2px solid var(--green-500);
+    }
+
+    .level-badge {
+      display: inline-block;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--green-700);
+      border-radius: 999px;
+      vertical-align: middle;
+      margin-left: 0.4rem;
+    }
+
+    .scale-table {
+      width: 100%;
+      max-width: 640px;
+      border-collapse: collapse;
+      margin: 0.75rem 0 1.5rem;
+      font-size: 0.92rem;
+    }
+    .scale-table th,
+    .scale-table td {
+      padding: 0.55rem 0.85rem;
+      text-align: left;
+      border: 1px solid var(--border);
+    }
+    .scale-table thead {
+      background: var(--green-100);
+    }
+    .scale-table th {
+      color: var(--green-900);
+    }
+    .scale-table td:first-child {
+      font-weight: 700;
+      color: var(--green-800);
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      width: 130px;
+    }
+    .scale-table td:last-child {
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      width: 80px;
+    }
+    .scale-5 { background: var(--green-100); }
+    .scale-4 { background: #f0f8f1; }
+    .scale-3 { background: #fbfcf2; }
+    .scale-2 { background: #fff8e6; }
+
+    .calc-box {
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.4rem;
+      margin: 1.5rem 0;
+    }
+    .calc-box h2 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      color: var(--green-800);
+    }
+    .calc-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+    .calc-row label {
+      flex: 1 1 320px;
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--green-900);
+    }
+    .calc-row select,
+    .calc-row input[type="number"] {
+      flex: 0 0 110px;
+      padding: 0.45rem 0.6rem;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .calc-row select:focus,
+    .calc-row input[type="number"]:focus {
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .calc-summary {
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed var(--green-300);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      align-items: baseline;
+      font-size: 1rem;
+    }
+    .calc-summary .big {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--green-800);
+      font-family: var(--font-mono);
+    }
+    .calc-grade {
+      display: inline-block;
+      padding: 0.3rem 0.9rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--green-700);
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+    .calc-grade.empty {
+      background: var(--text-muted);
+    }
+
+    .note-list {
+      margin: 0.5rem 0 0 1.25rem;
+      padding: 0;
+      font-size: 0.92rem;
+    }
+    .note-list li {
+      margin-bottom: 0.35rem;
+    }
+
+    @media (max-width: 720px) {
+      .criteria-table td.criterion,
+      .criteria-table td.score {
+        width: auto;
+      }
+      .criteria-table {
+        font-size: 0.85rem;
+      }
+      .max-score .hint {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules">Модули</a>
+      <a href="../index.html#appendices" class="active">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="../modules/module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="../modules/module2.html">2. Подключение к БД</a></li>
+        <li><a href="../modules/module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="../modules/module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="../modules/module5.html">5. Объекты БД</a></li>
+        <li><a href="../modules/module6.html">6. ER-диаграммы</a></li>
+        <li><a href="../modules/module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="../modules/module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="../modules/module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="glossary.html">Глоссарий</a></li>
+        <li><a href="reference.html">Горячие клавиши</a></li>
+        <li><a href="checklist.html">Чек-лист</a></li>
+        <li><a href="criteria.html" class="active">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#appendices">Приложения</a> →
+        Критерии оценивания
+      </nav>
+
+      <h1>Критерии оценивания итогового проекта</h1>
+      <p style="color: var(--text-muted); max-width: 780px;">
+        Итоговый проект модуля 9 оценивается по четырём основным группам
+        критериев. Таблица ниже — единая и для преподавателя, и для
+        самопроверки: студент заранее видит, за что начисляются баллы,
+        а преподаватель использует её как оценочный лист.
+      </p>
+
+      <div class="intro-tip">
+        <strong>Как читать таблицу.</strong> Для каждого критерия описан
+        уровень выполнения: «полностью», «частично» или «не выполнено»
+        — каждому соответствует количество баллов. Итоговая оценка
+        выставляется по суммарному баллу согласно шкале ниже.
+      </div>
+
+      <div class="max-score">
+        Максимум баллов за проект: <strong>40</strong>
+        <span class="hint">Из них: схема и связи — 14, процедуры и триггеры — 8, ограничения и права — 8, отчёт — 10.</span>
+      </div>
+
+      <!-- ================= 1. Полнота схемы и корректность связей ================= -->
+      <h2>1. Полнота схемы и корректность связей <span class="level-badge">14 баллов</span></h2>
+      <table class="criteria-table">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th>Уровень выполнения</th>
+            <th>Баллы</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="criterion" rowspan="3">Схема БД</td>
+            <td>Схема соответствует предметной области: 4+ сущности, все 7 шагов проекта выполнены, структура логична.</td>
+            <td class="score">6</td>
+          </tr>
+          <tr>
+            <td>Схема в целом верна, но есть недочёты: 1–2 шага выполнены формально или отсутствует необязательный элемент.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Схема неполная: менее 4 сущностей или пропущены ключевые шаги проекта.</td>
+            <td class="score">0–2</td>
+          </tr>
+
+          <tr>
+            <td class="criterion" rowspan="3">ER-диаграмма</td>
+            <td>ER-диаграмма построена, читаема, отражает все сущности и связи, приложена в отчёте.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>ER-диаграмма есть, но не полностью совпадает со схемой БД или оформлена неаккуратно.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>ER-диаграмма отсутствует или не соответствует созданной схеме.</td>
+            <td class="score">0</td>
+          </tr>
+
+          <tr>
+            <td class="criterion" rowspan="3">Ключи и связи</td>
+            <td>Все таблицы имеют первичные ключи, внешние ключи корректно отражают связи, нарушений ссылочной целостности нет.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Ключи в основном есть, но одна–две связи оформлены неточно или отсутствует внешний ключ там, где он нужен.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>Ключи отсутствуют или связи нарушают ссылочную целостность.</td>
+            <td class="score">0–1</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">Максимум по группе</td>
+            <td class="score">14</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- ================= 2. Работа процедур и триггеров ================= -->
+      <h2>2. Хранимая процедура и триггер <span class="level-badge">8 баллов</span></h2>
+      <table class="criteria-table">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th>Уровень выполнения</th>
+            <th>Баллы</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="criterion" rowspan="3">Хранимая процедура</td>
+            <td>Процедура осмысленна для предметной области, корректно создана и успешно выполнена; результат приложен в отчёте.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Процедура создана и выполняется, но слабо связана с предметной областью или результат не приложен.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>Процедура не создана или не выполняется.</td>
+            <td class="score">0</td>
+          </tr>
+
+          <tr>
+            <td class="criterion" rowspan="3">Триггер</td>
+            <td>Триггер выполняет осмысленное действие (проверка, автозаполнение, аудит) и продемонстрирован в работе.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Триггер есть, но действие тривиально или не показано, что он срабатывает.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>Триггер отсутствует или не работает.</td>
+            <td class="score">0</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">Максимум по группе</td>
+            <td class="score">8</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- ================= 3. Работа ограничений и права ================= -->
+      <h2>3. Работа ограничений и права пользователя <span class="level-badge">8 баллов</span></h2>
+      <table class="criteria-table">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th>Уровень выполнения</th>
+            <th>Баллы</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="criterion" rowspan="3">Пользователь и права</td>
+            <td>Создан пользователь с ограниченными правами, продемонстрирована работа ограничений (успех и отказ), скриншоты приложены.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Пользователь создан и права выданы, но проверка ограничений показана частично (только успех или только отказ).</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>Пользователь не создан или ограничения не проверены.</td>
+            <td class="score">0</td>
+          </tr>
+
+          <tr>
+            <td class="criterion" rowspan="3">Тестовые данные и ограничения</td>
+            <td>Главная таблица содержит не менее 10 осмысленных записей; ограничения (PK, FK, NOT NULL, CHECK) работают.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Записей меньше 10 или данные шаблонные; одно–два ограничения не проверены.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>Данных почти нет или ограничения не работают из-за ошибок в схеме.</td>
+            <td class="score">0–1</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">Максимум по группе</td>
+            <td class="score">8</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- ================= 4. Качество DDL и отчёта ================= -->
+      <h2>4. Качество DDL и отчёта <span class="level-badge">10 баллов</span></h2>
+      <table class="criteria-table">
+        <thead>
+          <tr>
+            <th>Критерий</th>
+            <th>Уровень выполнения</th>
+            <th>Баллы</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="criterion" rowspan="3">Итоговый DDL-скрипт</td>
+            <td>DDL-скрипт полный, выполняется без ошибок на чистой БД, приложен отдельным файлом.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>DDL-скрипт есть, но при выполнении на чистой БД возникают ошибки или он неполон.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>DDL-скрипт отсутствует или не соответствует схеме.</td>
+            <td class="score">0–1</td>
+          </tr>
+
+          <tr>
+            <td class="criterion" rowspan="3">Отчёт в PDF</td>
+            <td>Все разделы заполнены, скриншоты читаемы, отчёт аккуратно оформлен и экспортирован в PDF.</td>
+            <td class="score">4</td>
+          </tr>
+          <tr>
+            <td>Отчёт заполнен, но часть разделов пуста или скриншоты плохо читаемы.</td>
+            <td class="score">2–3</td>
+          </tr>
+          <tr>
+            <td>Отчёт не сдан или заполнен фрагментарно.</td>
+            <td class="score">0–1</td>
+          </tr>
+
+          <tr>
+            <td class="criterion" rowspan="2">Самостоятельность и осмысленность</td>
+            <td>Ответы и комментарии отражают понимание выполненной работы; видны собственные решения и обоснования.</td>
+            <td class="score">2</td>
+          </tr>
+          <tr>
+            <td>Ответы формальные или скопированы без понимания.</td>
+            <td class="score">0–1</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2">Максимум по группе</td>
+            <td class="score">10</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- ================= Шкала оценивания ================= -->
+      <h2>Шкала перевода баллов в оценку</h2>
+      <p style="font-size: 0.92rem; color: var(--text-muted);">
+        Ниже — рекомендуемая шкала. Преподаватель может скорректировать
+        её под свою программу.
+      </p>
+      <table class="scale-table">
+        <thead>
+          <tr>
+            <th>Сумма баллов</th>
+            <th>Уровень</th>
+            <th>Оценка</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="scale-5">
+            <td>36–40</td>
+            <td>Проект выполнен полностью, все критерии закрыты, видны собственные решения.</td>
+            <td>5</td>
+          </tr>
+          <tr class="scale-4">
+            <td>28–35</td>
+            <td>Проект выполнен, есть небольшие недочёты в схеме или отчёте.</td>
+            <td>4</td>
+          </tr>
+          <tr class="scale-3">
+            <td>20–27</td>
+            <td>Основные шаги выполнены, но часть критериев закрыта частично.</td>
+            <td>3</td>
+          </tr>
+          <tr class="scale-2">
+            <td>0–19</td>
+            <td>Проект выполнен фрагментарно, ключевые шаги отсутствуют.</td>
+            <td>2</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ================= Калькулятор самооценки ================= -->
+      <section class="calc-box" id="calc">
+        <h2>Калькулятор самооценки</h2>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0;">
+          Оцените свой проект по каждой группе критериев — калькулятор
+          посчитает сумму баллов и подскажет предполагаемую оценку.
+          Это не заменяет проверку преподавателем, но помогает понять,
+          к чему стремиться.
+        </p>
+
+        <div class="calc-row">
+          <label for="calc-schema">1. Полнота схемы и корректность связей</label>
+          <input type="number" id="calc-schema" min="0" max="14" step="1" value="0">
+        </div>
+        <div class="calc-row">
+          <label for="calc-routines">2. Хранимая процедура и триггер</label>
+          <input type="number" id="calc-routines" min="0" max="8" step="1" value="0">
+        </div>
+        <div class="calc-row">
+          <label for="calc-constraints">3. Работа ограничений и права пользователя</label>
+          <input type="number" id="calc-constraints" min="0" max="8" step="1" value="0">
+        </div>
+        <div class="calc-row">
+          <label for="calc-report">4. Качество DDL и отчёта</label>
+          <input type="number" id="calc-report" min="0" max="10" step="1" value="0">
+        </div>
+
+        <div class="calc-summary">
+          <span>Сумма баллов: <span class="big" id="calc-total">0</span> / 40</span>
+          <span>Предполагаемая оценка: <span class="calc-grade empty" id="calc-grade">—</span></span>
+        </div>
+
+        <div class="actions" style="margin-top: 1rem;">
+          <button type="button" class="secondary" id="calc-reset">Сбросить калькулятор</button>
+        </div>
+      </section>
+
+      <!-- ================= Общие замечания ================= -->
+      <h2>Общие замечания</h2>
+      <ul class="note-list">
+        <li>
+          <strong>Все баллы складываются</strong> внутри каждой группы;
+          преподаватель может выставить промежуточное значение (например,
+          3 из 4), если работа частично соответствует уровню.
+        </li>
+        <li>
+          <strong>Скриншоты</strong> должны быть читаемыми и подтверждать
+          выполнение. Пустой экран или неразборчивое изображение не
+          засчитывается даже при правильной схеме.
+        </li>
+        <li>
+          <strong>DDL-скрипт</strong> проверяется запуском на чистой БД.
+          Скрипт, который выполняется только в «своей» базе с уже
+          созданными объектами, считается неполным.
+        </li>
+        <li>
+          <strong>Самостоятельность</strong> — ответы и комментарии
+          должны отражать понимание, а не копирование из методички.
+          Это отдельный критерий с весом 2 балла.
+        </li>
+        <li>
+          <strong>Оценка «5»</strong> не требует «идеального» проекта —
+          достаточно, чтобы все шаги были выполнены осмысленно
+          и отчёт был аккуратно оформлен.
+        </li>
+      </ul>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="checklist.html">← Чек-лист самопроверки</a>
+        <a href="../index.html">На главную →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+
+  <!-- Локальный калькулятор самооценки -->
+  <script>
+    (function () {
+      'use strict';
+
+      function toNumber(v) {
+        const n = parseFloat(v);
+        return isNaN(n) ? 0 : n;
+      }
+
+      function clamp(n, min, max) {
+        return Math.max(min, Math.min(max, n));
+      }
+
+      function getGrade(total) {
+        if (total >= 36) return '5';
+        if (total >= 28) return '4';
+        if (total >= 20) return '3';
+        if (total > 0)  return '2';
+        return '';
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const inputs = [
+          document.getElementById('calc-schema'),
+          document.getElementById('calc-routines'),
+          document.getElementById('calc-constraints'),
+          document.getElementById('calc-report')
+        ];
+        const totalEl = document.getElementById('calc-total');
+        const gradeEl = document.getElementById('calc-grade');
+        const resetBtn = document.getElementById('calc-reset');
+        if (!totalEl || inputs.some(function (i) { return !i; })) return;
+
+        function recalc() {
+          let total = 0;
+          inputs.forEach(function (i) {
+            const min = toNumber(i.min);
+            const max = toNumber(i.max);
+            const v = clamp(toNumber(i.value), min, max);
+            if (v !== toNumber(i.value)) i.value = v;
+            total += v;
+          });
+          totalEl.textContent = total;
+
+          const g = getGrade(total);
+          if (g) {
+            gradeEl.textContent = g;
+            gradeEl.classList.remove('empty');
+          } else {
+            gradeEl.textContent = '—';
+            gradeEl.classList.add('empty');
+          }
+        }
+
+        inputs.forEach(function (i) {
+          i.addEventListener('input', recalc);
+          i.addEventListener('change', recalc);
+        });
+
+        resetBtn.addEventListener('click', function () {
+          inputs.forEach(function (i) { i.value = 0; });
+          recalc();
+        });
+
+        recalc();
+      });
+    })();
+  </script>
+</body>
+</html>

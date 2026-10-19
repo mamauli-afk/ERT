@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Справочник горячих клавиш — ЭРТ по Red Expert</title>
+  <meta name="description" content="Горячие клавиши Red Expert по категориям: файл, редактирование, база данных, интерфейс.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    .hotkeys-search {
+      position: sticky;
+      top: 70px;
+      z-index: 20;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.25rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hotkeys-search input[type="search"] {
+      flex: 1;
+      min-width: 0;
+      padding: 0.55rem 0.85rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .hotkeys-search input[type="search"]:focus {
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .hotkeys-search .clear-btn {
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      background: #fff;
+      color: var(--green-800);
+      border-color: var(--green-300);
+    }
+    .hotkeys-search .clear-btn:hover {
+      background: var(--green-50);
+    }
+
+    .category-block {
+      margin-bottom: 2rem;
+    }
+    .category-block h2 {
+      font-size: 1.15rem;
+      color: var(--green-800);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 2px solid var(--green-200);
+    }
+
+    .hotkeys-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin-bottom: 0.75rem;
+    }
+    .hotkeys-table thead {
+      background: var(--green-100);
+    }
+    .hotkeys-table th,
+    .hotkeys-table td {
+      padding: 0.55rem 0.75rem;
+      text-align: left;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .hotkeys-table th {
+      color: var(--green-900);
+      font-weight: 700;
+    }
+    .hotkeys-table tbody tr:nth-child(even) {
+      background: var(--bg-soft);
+    }
+    .hotkeys-table tbody tr:hover {
+      background: var(--green-50);
+    }
+    .hotkeys-table td:last-child {
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      color: var(--green-900);
+    }
+    kbd {
+      display: inline-block;
+      padding: 0.1rem 0.45rem;
+      font-family: var(--font-mono);
+      font-size: 0.85em;
+      color: var(--green-900);
+      background: #fff;
+      border: 1px solid var(--green-300);
+      border-bottom-width: 2px;
+      border-radius: 4px;
+      box-shadow: 0 1px 0 var(--green-200);
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    .note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+    .warning-box {
+      background: #fff8e6;
+      border-left: 4px solid #e0a800;
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      margin: 1.5rem 0;
+      font-size: 0.92rem;
+    }
+    .warning-box strong {
+      color: #8a6d00;
+    }
+    .empty-state {
+      display: none;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      background: var(--bg-soft);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius);
+      font-size: 0.92rem;
+    }
+    .empty-state.visible {
+      display: block;
+    }
+    @media (max-width: 640px) {
+      .hotkeys-search {
+        top: 0;
+        border-radius: 0;
+        margin-left: -1rem;
+        margin-right: -1rem;
+        border-left: none;
+        border-right: none;
+      }
+      .hotkeys-table td:last-child {
+        white-space: normal;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules">Модули</a>
+      <a href="../index.html#appendices" class="active">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="../modules/module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="../modules/module2.html">2. Подключение к БД</a></li>
+        <li><a href="../modules/module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="../modules/module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="../modules/module5.html">5. Объекты БД</a></li>
+        <li><a href="../modules/module6.html">6. ER-диаграммы</a></li>
+        <li><a href="../modules/module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="../modules/module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="../modules/module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="glossary.html">Глоссарий</a></li>
+        <li><a href="reference.html" class="active">Горячие клавиши</a></li>
+        <li><a href="checklist.html">Чек-лист</a></li>
+        <li><a href="criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#appendices">Приложения</a> →
+        Справочник горячих клавиш
+      </nav>
+
+      <h1>Справочник горячих клавиш Red Expert</h1>
+      <p style="color: var(--text-muted); max-width: 780px;">
+        Базовый набор горячих клавиш, сгруппированный по категориям.
+        Используйте живой поиск, чтобы быстро найти нужное действие или
+        комбинацию. Обратите внимание, что набор сочетаний может немного
+        отличаться в зависимости от версии Red Expert и операционной системы.
+      </p>
+
+      <div class="warning-box">
+        <strong>Важно: настройка горячих клавиш.</strong><br>
+        В Red Expert все горячие клавиши можно переназначить.
+        Для этого нужно зайти в <strong>«Инструменты» → «Настройки» → раздел «Shortcuts»</strong> 
+        (Горячие клавиши). Там вы сможете увидеть актуальные сочетания для вашей версии 
+        и, при необходимости, изменить их под себя.
+      </div>
+
+      <!-- ================= Поиск ================= -->
+      <div class="hotkeys-search">
+        <input type="search" id="hotkeys-search"
+               placeholder="Поиск по действию или комбинации…"
+               aria-label="Поиск по горячим клавишам" autocomplete="off">
+        <button type="button" class="clear-btn" id="hotkeys-clear" aria-label="Очистить поиск">
+          Очистить
+        </button>
+      </div>
+
+      <div class="empty-state" id="hotkeys-empty">
+        По вашему запросу ничего не найдено. Попробуйте другое действие
+        или <a href="#" id="hotkeys-reset">сбросьте поиск</a>.
+      </div>
+
+      <!-- ================= Файл и подключения ================= -->
+      <section class="category-block">
+        <h2>Файл и подключения</h2>
+        <table class="hotkeys-table">
+          <thead>
+            <tr>
+              <th>Действие</th>
+              <th>Горячая клавиша</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-search="создать новое подключение new connection">
+              <td>Создать новое подключение</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd></td>
+            </tr>
+            <tr data-search="поиск объекта search дерево подключений">
+              <td>Поиск объекта в дереве подключений</td>
+              <td><kbd>Ctrl</kbd> + <kbd>F</kbd></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ================= Редактирование (SQL-редактор) ================= -->
+      <section class="category-block">
+        <h2>Редактирование (SQL-редактор)</h2>
+        <table class="hotkeys-table">
+          <thead>
+            <tr>
+              <th>Действие</th>
+              <th>Горячая клавиша</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-search="автодополнение подсказка autocomplete ctrl+space">
+              <td>Автодополнение (подсказка ключевых слов и объектов БД)</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Space</kbd></td>
+            </tr>
+            <tr data-search="отменить undo отмена ctrl+z">
+              <td>Отменить последнее действие</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td>
+            </tr>
+            <tr data-search="комментировать раскомментировать ctrl+/">
+              <td>Закомментировать / раскомментировать строку</td>
+              <td><kbd>Ctrl</kbd> + <kbd>/</kbd></td>
+            </tr>
+            <tr data-search="перейти к объекту ctrl+клик">
+              <td>Быстрый переход к объекту БД по его имени в редакторе</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Левая кнопка мыши</kbd></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ================= База данных и выполнение SQL ================= -->
+      <section class="category-block">
+        <h2>База данных и выполнение SQL</h2>
+        <table class="hotkeys-table">
+          <thead>
+            <tr>
+              <th>Действие</th>
+              <th>Горячая клавиша</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-search="выполнить sql скрипт текущий оператор f9">
+              <td>Выполнить SQL-скрипт (текущий оператор)</td>
+              <td><kbd>F9</kbd></td>
+            </tr>
+            <tr data-search="выполнить скрипт одним запросом все операторы f5">
+              <td>Выполнить скрипт одним запросом (все операторы)</td>
+              <td><kbd>F5</kbd></td>
+            </tr>
+            <tr data-search="выполнить скрипт в профайлере shift+f5">
+              <td>Выполнить SQL-скрипт в профайлере</td>
+              <td><kbd>Shift</kbd> + <kbd>F5</kbd></td>
+            </tr>
+            <tr data-search="зафиксировать транзакцию commit ctrl+shift+q">
+              <td>Зафиксировать транзакцию (Commit)</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Q</kbd></td>
+            </tr>
+            <tr data-search="откатить транзакцию rollback ctrl+shift+r">
+              <td>Откатить транзакцию (Rollback)</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd></td>
+            </tr>
+            <tr data-search="закладки ctrl+b">
+              <td>Управление закладками запросов</td>
+              <td><kbd>Ctrl</kbd> + <kbd>B</kbd></td>
+            </tr>
+            <tr data-search="история запросов ctrl+shift+h">
+              <td>Открыть историю выполнения запросов</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>H</kbd></td>
+            </tr>
+            <tr data-search="предыдущий запрос ctrl+shift+down">
+              <td>Вставить в редактор предыдущий выполненный запрос</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>↓</kbd></td>
+            </tr>
+            <tr data-search="следующий запрос ctrl+shift+up">
+              <td>Вставить в редактор следующий выполненный запрос</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>↑</kbd></td>
+            </tr>
+            <tr data-search="план запроса ctrl+shift+p">
+              <td>Показать план запроса</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ================= Интерфейс и панели ================= -->
+      <section class="category-block">
+        <h2>Интерфейс и панели</h2>
+        <table class="hotkeys-table">
+          <thead>
+            <tr>
+              <th>Действие</th>
+              <th>Горячая клавиша</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-search="панель вывода ctrl+e">
+              <td>Показать / скрыть панель вывода результатов</td>
+              <td><kbd>Ctrl</kbd> + <kbd>E</kbd></td>
+            </tr>
+            <tr data-search="ориентация разделителя ctrl+alt+q">
+              <td>Изменить ориентацию разделителя</td>
+              <td><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Q</kbd></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="glossary.html">← Глоссарий</a>
+        <a href="checklist.html">Чек-лист самопроверки →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+
+  <!-- Локальный скрипт поиска по горячим клавишам -->
+  <script>
+    (function () {
+      'use strict';
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('hotkeys-search');
+        const clearBtn = document.getElementById('hotkeys-clear');
+        const resetLink = document.getElementById('hotkeys-reset');
+        const emptyState = document.getElementById('hotkeys-empty');
+        if (!input) return;
+
+        const rows = Array.from(document.querySelectorAll('tr[data-search]'));
+        const blocks = Array.from(document.querySelectorAll('.category-block'));
+
+        function norm(s) {
+          return (s || '').toLowerCase().replace(/ё/g, 'е').trim();
+        }
+
+        rows.forEach(function (row) {
+          const text = (row.getAttribute('data-search') || '') + ' ' + (row.textContent || '');
+          row._searchText = norm(text);
+        });
+
+        function applyFilter(q) {
+          const query = norm(q);
+          let visible = 0;
+
+          rows.forEach(function (row) {
+            const match = !query || row._searchText.indexOf(query) !== -1;
+            row.style.display = match ? '' : 'none';
+            if (match) visible++;
+          });
+
+          blocks.forEach(function (block) {
+            const any = block.querySelectorAll('tr[data-search]:not([style*="display: none"])').length > 0;
+            block.style.display = any ? '' : 'none';
+          });
+
+          emptyState.classList.toggle('visible', visible === 0);
+        }
+
+        input.addEventListener('input', function () {
+          applyFilter(input.value);
+        });
+
+        clearBtn.addEventListener('click', function () {
+          input.value = '';
+          applyFilter('');
+          input.focus();
+        });
+
+        if (resetLink) {
+          resetLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            input.value = '';
+            applyFilter('');
+            input.focus();
+          });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

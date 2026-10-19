@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 3. Обзор интерфейса и навигация — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 3: трёхпанельный интерфейс Red Expert, дерево подключений, прикрепляемые панели и горячие клавиши.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы.
+       Базовое оформление — из style.css. -->
+  <style>
+    .object-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.35rem 1rem;
+      margin: 0.5rem 0 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+    .object-types span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--green-900);
+    }
+    .object-types span::before {
+      content: "•";
+      color: var(--green-600);
+      font-weight: 700;
+    }
+    .hotkeys-table input[type="text"] {
+      display: block;
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .hotkeys-table input[type="text"]:focus {
+      background: #fff;
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .hotkeys-table td:first-child {
+      font-weight: 600;
+      color: var(--green-900);
+      white-space: nowrap;
+      width: 46%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html" class="active">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 3
+      </nav>
+
+      <h1>Модуль 3. Обзор графического интерфейса и навигация по объектам</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Освоить трёхпанельный интерфейс и дерево подключений.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m3">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 3 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Три основные области интерфейса</h3>
+        <ul>
+          <li>
+            <strong>Панель инструментов</strong> — кнопки для часто используемых
+            действий: создание документа, сохранение, выполнение запроса,
+            форматирование, настройки.
+          </li>
+          <li>
+            <strong>Дерево подключений</strong> — иерархический список подключений
+            и объектов базы данных (таблицы, представления, процедуры, триггеры,
+            индексы, домены и т.д.).
+          </li>
+          <li>
+            <strong>Рабочая область</strong> — место, где открываются вкладки
+            документов: редактор запросов, свойства объекта, ER-диаграмма,
+            журнал трассировки.
+          </li>
+        </ul>
+
+        <h3>Вкладки и прикрепляемые панели</h3>
+        <p>
+          Red Expert использует прикрепляемые (dockable) панели. Основные из них:
+        </p>
+        <ul>
+          <li><strong>Браузер баз данных</strong> — дерево объектов подключения;</li>
+          <li><strong>Редактор запросов</strong> — рабочая область для SQL;</li>
+          <li><strong>Менеджер пользователей</strong> — управление учётными записями;</li>
+          <li><strong>Трассировка</strong> — мониторинг действий в БД;</li>
+          <li><strong>ER-диаграммы</strong> — визуальное проектирование схемы.</li>
+        </ul>
+        <p>
+          Панели можно перетаскивать между областями, прикреплять к краям окна,
+          объединять во вкладки и откреплять в отдельные окна.
+        </p>
+
+        <h3>Настройка отображения панелей</h3>
+        <p>
+          Видимость панелей включается и выключается через меню
+          <em>Вид</em>. Там же можно сбросить расположение панелей к стандартному,
+          если рабочее пространство оказалось перегруженным.
+        </p>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Если панель случайно закрыта, не ищите её
+          по всему экрану — откройте меню <em>Вид</em> и включите нужную панель
+          заново. Это быстрее, чем перезапускать приложение.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m3_t1">
+        <h2>Задание 1. Изучение дерева подключений</h2>
+        <p>
+          Разверните подключение к учебной БД. Найдите и перечислите в тетради
+          все типы объектов, отображаемых в дереве.
+        </p>
+
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+          Для ориентира — типичный набор узлов дерева:
+        </p>
+        <div class="object-types">
+          <span>Таблицы</span>
+          <span>Представления</span>
+          <span>Процедуры</span>
+          <span>Триггеры</span>
+          <span>Индексы</span>
+          <span>Домены</span>
+          <span>Генераторы</span>
+          <span>Исключения</span>
+          <span>Роли</span>
+          <span>Пользователи</span>
+          <span>Внешние функции</span>
+          <span>Пакеты</span>
+        </div>
+
+        <label>Перечислите все типы объектов, которые вы видите в дереве
+          <textarea data-save="m3_t1_answer" style="min-height: 120px;"
+                    placeholder="1. Таблицы&#10;2. Представления&#10;3. ..."></textarea>
+        </label>
+
+        <label>Скриншот развёрнутого дерева подключений
+          <input type="file" accept="image/*" data-preview="m3_t1_img">
+        </label>
+        <div class="preview" id="preview-m3_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m3_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m3_t2">
+        <h2>Задание 2. Настройка рабочего пространства</h2>
+        <p>
+          Перетащите панель «Редактор запросов» в правую область,
+          а «Браузер баз данных» — в левую. Зафиксируйте результат скриншотом.
+        </p>
+
+        <label>Опишите, что изменилось в расположении панелей
+          <textarea data-save="m3_t2_answer"
+                    placeholder="Например: браузер БД закреплён слева, редактор запросов — справа; панель свойств — снизу"></textarea>
+        </label>
+
+        <label>Скриншот рабочего пространства после перестановки
+          <input type="file" accept="image/*" data-preview="m3_t2_img">
+        </label>
+        <div class="preview" id="preview-m3_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m3_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m3_t3">
+        <h2>Задание 3. Горячие клавиши</h2>
+        <p>
+          Используя руководство пользователя, выпишите 5 горячих клавиш
+          для навигации по объектам и работы с вкладками.
+        </p>
+
+        <table class="hotkeys-table">
+          <thead>
+            <tr>
+              <th>Действие</th>
+              <th>Горячая клавиша</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. <input type="text" data-save="m3_t3_action1" placeholder="Действие"></td>
+              <td><input type="text" data-save="m3_t3_key1" placeholder="Комбинация"></td>
+            </tr>
+            <tr>
+              <td>2. <input type="text" data-save="m3_t3_action2" placeholder="Действие"></td>
+              <td><input type="text" data-save="m3_t3_key2" placeholder="Комбинация"></td>
+            </tr>
+            <tr>
+              <td>3. <input type="text" data-save="m3_t3_action3" placeholder="Действие"></td>
+              <td><input type="text" data-save="m3_t3_key3" placeholder="Комбинация"></td>
+            </tr>
+            <tr>
+              <td>4. <input type="text" data-save="m3_t3_action4" placeholder="Действие"></td>
+              <td><input type="text" data-save="m3_t3_key4" placeholder="Комбинация"></td>
+            </tr>
+            <tr>
+              <td>5. <input type="text" data-save="m3_t3_action5" placeholder="Действие"></td>
+              <td><input type="text" data-save="m3_t3_key5" placeholder="Комбинация"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <label>Скриншот или комментарий к найденным комбинациям
+          <input type="file" accept="image/*" data-preview="m3_t3_img">
+        </label>
+        <div class="preview" id="preview-m3_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m3_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к приложению
+          «Горячие клавиши».
+        </p>
+        <ul class="checklist">
+          <li>Различаю три основные области интерфейса Red Expert.</li>
+          <li>Знаю, какие панели можно открыть через меню «Вид».</li>
+          <li>Умею перетаскивать и закреплять панели в рабочей области.</li>
+          <li>Ориентируюсь в дереве подключений и знаю основные типы объектов.</li>
+          <li>Знаю не менее 5 горячих клавиш для навигации и работы с вкладками.</li>
+          <li>Могу вернуть стандартное расположение панелей, если что-то потерялось.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m3_check"
+                    placeholder="Например: закрыл панель браузера БД → включил её через меню Вид"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module2.html">← Модуль 2. Подключение к БД</a>
+        <a href="module4.html">Модуль 4. Редактор SQL-запросов →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

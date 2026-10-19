@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 7. Пользователи, права и трассировка — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 7: создание пользователей, назначение ролей и привилегий, работа с Trace Manager в Red Expert.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    textarea.sql {
+      min-height: 130px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+    textarea.log {
+      min-height: 160px;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+      background: #0f1a12;
+      color: #c8e6c9;
+      border-color: var(--green-800);
+    }
+    textarea.log:focus {
+      background: #0f1a12;
+      color: #c8e6c9;
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.25);
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+    .warning-box {
+      background: #fff8e6;
+      border-left: 4px solid #e0a800;
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+    }
+    .warning-box strong {
+      color: #8a6d00;
+    }
+    .params-table input[type="text"] {
+      display: block;
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .params-table input[type="text"]:focus {
+      background: #fff;
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .params-table td:first-child {
+      font-weight: 600;
+      color: var(--green-900);
+      white-space: nowrap;
+      width: 32%;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html" class="active">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 7
+      </nav>
+
+      <h1>Модуль 7. Администрирование: пользователи, права и трассировка</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Освоить базовые административные функции Red Expert.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m7">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 3 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Менеджер пользователей</h3>
+        <p>
+          Инструмент <strong>User Manager</strong> (менеджер пользователей)
+          предназначен для создания, изменения и удаления учётных записей
+          СУБД. Здесь задаются имя пользователя, пароль, а также
+          административные флаги (например, права SYSDBA).
+        </p>
+
+        <h3>Менеджер прав</h3>
+        <p>
+          Инструмент <strong>Privilege Manager</strong> (менеджер прав)
+          управляет тем, что пользователю разрешено делать с объектами
+          базы данных: <code>SELECT</code>, <code>INSERT</code>,
+          <code>UPDATE</code>, <code>DELETE</code>, <code>EXECUTE</code>
+          и т.д. Здесь же назначаются роли — именованные наборы привилегий,
+          которые можно связать с несколькими пользователями.
+        </p>
+
+        <h3>Роли</h3>
+        <p>
+          Роль — это «пакет» привилегий, который удобно выдавать группе
+          пользователей. Например, роль <code>READER</code> может включать
+          право <code>SELECT</code> на несколько таблиц. Связывание роли
+          с пользователем избавляет от повторной выдачи одних и тех же прав.
+        </p>
+
+        <h3>Трассировка (Trace Manager)</h3>
+        <p>
+          <strong>Trace Manager</strong> позволяет в реальном времени
+          отслеживать действия, выполняемые в базе данных: SQL-запросы,
+          ошибки, подключения и отключения пользователей. Журнал трассировки
+          удобно сохранять для отчёта и анализа.
+        </p>
+
+        <div class="warning-box">
+          <strong>Риски трассировки.</strong> Трассировка создаёт нагрузку
+          на сервер и может накапливать большие объёмы данных. Включайте её
+          только на время выполнения учебной задачи и не оставляйте
+          работающей на «боевой» базе без необходимости.
+        </div>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Разделяйте задачи: учётные записи создаются
+          в менеджере пользователей, а права и роли — в менеджере прав.
+          Так проще не запутаться, кто и что может делать в БД.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m7_t1">
+        <h2>Задание 1. Создание пользователя</h2>
+        <p>
+          Создайте нового пользователя <code>TEST_USER</code> с паролем.
+          Предоставьте ему право <code>SELECT</code> только на таблицу
+          <code>STUDENT</code>. Проверьте действие прав, подключившись
+          под новой учётной записью.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: в Red Expert откройте <em>Менеджер пользователей</em>
+          (обычно в меню «Инструменты» или через дерево подключения), создайте
+          пользователя, затем в <em>Менеджере прав</em> выдайте
+          <code>SELECT</code> на <code>STUDENT</code>. После — создайте новое
+          подключение под <code>TEST_USER</code> и проверьте, что доступ
+          к другим таблицам закрыт.
+        </div>
+
+        <div class="warning-box">
+          <strong>Безопасность.</strong> Пароль в отчёт не записывается.
+          Укажите только имя пользователя и перечень выданных прав —
+          этого достаточно для проверки задания.
+        </div>
+
+        <table class="params-table">
+          <thead>
+            <tr>
+              <th>Параметр</th>
+              <th>Значение</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Имя пользователя</td>
+              <td><input type="text" data-save="m7_t1_username" placeholder="TEST_USER"></td>
+            </tr>
+            <tr>
+              <td>Выданные привилегии</td>
+              <td><input type="text" data-save="m7_t1_grants" placeholder="SELECT ON STUDENT"></td>
+            </tr>
+            <tr>
+              <td>Способ проверки</td>
+              <td><input type="text" data-save="m7_t1_check" placeholder="Новое подключение под TEST_USER, попытка SELECT из другой таблицы"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <label>Результат проверки прав
+          <textarea data-save="m7_t1_result"
+                    placeholder="Например: SELECT из STUDENT выполнена успешно; SELECT из CLIENT — ошибка 'no permission for read/select access to table CLIENT'"></textarea>
+        </label>
+
+        <label>Скриншот менеджера пользователей / менеджера прав
+          <input type="file" accept="image/*" data-preview="m7_t1_img">
+        </label>
+        <div class="preview" id="preview-m7_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m7_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m7_t2">
+        <h2>Задание 2. Создание роли</h2>
+        <p>
+          Создайте роль <code>READER</code>, назначьте ей права на чтение
+          нескольких таблиц и свяжите с пользователем <code>TEST_USER</code>.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: роль создаётся в <em>Менеджере прав</em> (или через
+          DDL-скрипт <code>CREATE ROLE READER;</code>). Затем роли выдаются
+          привилегии <code>SELECT</code> на нужные таблицы, а сама роль
+          назначается пользователю <code>TEST_USER</code>.
+        </div>
+
+        <label>Таблицы, на которые роли READER выдано право SELECT
+          <textarea data-save="m7_t2_tables"
+                    placeholder="Например: STUDENT, CLIENT, PHONE"></textarea>
+        </label>
+
+        <label>DDL-скрипт создания роли и выдачи прав
+          <textarea class="sql" data-save="m7_t2_ddl"
+                    placeholder="CREATE ROLE READER;&#10;GRANT SELECT ON STUDENT TO READER;&#10;GRANT SELECT ON CLIENT TO READER;&#10;GRANT READER TO TEST_USER;"></textarea>
+        </label>
+
+        <label>Как проверили, что роль работает
+          <textarea data-save="m7_t2_result"
+                    placeholder="Например: подключился под TEST_USER, выполнил SELECT из CLIENT — успешно; из PHONE — отказано"></textarea>
+        </label>
+
+        <label>Скриншот настройки роли
+          <input type="file" accept="image/*" data-preview="m7_t2_img">
+        </label>
+        <div class="preview" id="preview-m7_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m7_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m7_t3">
+        <h2>Задание 3. Трассировка</h2>
+        <p>
+          Включите трассировку для отслеживания выполняемых SQL-запросов.
+          Выполните несколько запросов от имени <code>TEST_USER</code>
+          и сохраните журнал трассировки в отчёт.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: в Red Expert откройте <em>Trace Manager</em>
+          (или <em>Трассировка</em> в меню «Инструменты»), включите новую
+          сессию трассировки, выполните 3–5 запросов от имени
+          <code>TEST_USER</code>, затем сохраните или скопируйте журнал.
+        </div>
+
+        <div class="warning-box">
+          <strong>Не забудьте выключить трассировку</strong> после выполнения
+          задания — она нагружает сервер и накапливает данные.
+        </div>
+
+        <label>Какие запросы выполняли под TEST_USER
+          <textarea data-save="m7_t3_queries" style="min-height: 110px;"
+                    placeholder="1. SELECT * FROM STUDENT;&#10;2. SELECT * FROM CLIENT;&#10;3. SELECT NAME FROM STUDENT WHERE ID = 1;"></textarea>
+        </label>
+
+        <label>Журнал трассировки (скопируйте вывод Trace Manager)
+          <textarea class="log" data-save="m7_t3_log"
+                    placeholder="2026-01-15 10:23:14.5120 (T1) SELECT * FROM STUDENT; &#10;2026-01-15 10:23:22.1087 (T2) SELECT * FROM CLIENT; -- ERROR: no permission&#10;..."></textarea>
+        </label>
+
+        <label>Что интересного заметили в журнале
+          <textarea data-save="m7_t3_comment"
+                    placeholder="Например: в журнале видно, что запрос к CLIENT завершился ошибкой прав; видны имена пользователей и время выполнения"></textarea>
+        </label>
+
+        <label>Скриншот окна Trace Manager
+          <input type="file" accept="image/*" data-preview="m7_t3_img">
+        </label>
+        <div class="preview" id="preview-m7_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m7_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Контрольные вопросы ================= -->
+      <section class="questions">
+        <h2>Контрольные вопросы</h2>
+
+        <label>1. Чем отличается менеджер пользователей от менеджера прав?
+          <textarea data-save="m7_q1"
+                    placeholder="Опишите: менеджер пользователей создаёт учётные записи и пароли; менеджер прав управляет привилегиями на объекты и ролями"></textarea>
+        </label>
+
+        <label>2. Для каких задач используется Trace Manager и какие риски с ним связаны?
+          <textarea data-save="m7_q2"
+                    placeholder="Опишите задачи (мониторинг запросов, поиск узких мест, аудит) и риски (нагрузка на сервер, объём журнала, конфиденциальность)"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к глоссарию.
+        </p>
+        <ul class="checklist">
+          <li>Понимаю разницу между менеджером пользователей и менеджером прав.</li>
+          <li>Умею создавать нового пользователя и выдавать ему привилегии.</li>
+          <li>Умею проверять действие прав, подключаясь под новой учётной записью.</li>
+          <li>Понимаю, зачем нужны роли и как их назначать.</li>
+          <li>Умею включать трассировку и сохранять её журнал.</li>
+          <li>Помню о рисках трассировки и выключаю её после работы.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m7_check"
+                    placeholder="Например: 'no permission for read/select' → не выдано право SELECT или роль не назначена пользователю"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module6.html">← Модуль 6. ER-диаграммы</a>
+        <a href="module8.html">Модуль 8. Импорт и экспорт →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

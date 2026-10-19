@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 9. Итоговый проект — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 9: итоговый проект по разработке структуры базы данных в Red Expert — ER-диаграмма, таблицы, процедуры, триггеры, пользователи, DDL.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    textarea.sql {
+      min-height: 140px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+    textarea.sql.tall {
+      min-height: 260px;
+    }
+    textarea.data {
+      min-height: 140px;
+      font-family: var(--font-mono);
+      font-size: 0.86rem;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+      background: var(--bg-soft);
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+    .warning-box {
+      background: #fff8e6;
+      border-left: 4px solid #e0a800;
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+    }
+    .warning-box strong {
+      color: #8a6d00;
+    }
+    .theme-select {
+      display: block;
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.55rem 0.75rem;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .theme-select:focus {
+      background: #fff;
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.5rem;
+    }
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      width: 32px;
+      height: 32px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--green-700);
+      border-radius: 50%;
+      font-size: 0.95rem;
+    }
+    .step-header h2 {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--green-800);
+    }
+    .criteria-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 0.4rem 1rem;
+      margin: 0.5rem 0 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+    .criteria-list span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--green-900);
+    }
+    .criteria-list span::before {
+      content: "◆";
+      color: var(--green-600);
+      font-size: 0.8rem;
+    }
+    .inline-input {
+      display: block;
+      width: 100%;
+      margin-top: 0.35rem;
+      padding: 0.55rem 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .inline-input:focus {
+      background: #fff;
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .final-block {
+      border: 2px solid var(--green-500);
+      background: var(--green-50);
+    }
+    .final-block h2 {
+      color: var(--green-900);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html" class="active">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 9
+      </nav>
+
+      <h1>Модуль 9. Итоговый проект (интеграция навыков)</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Применить все полученные навыки для решения комплексной задачи.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m9">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 1 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория / постановка -->
+      <details class="theory" open>
+        <summary>Краткая постановка задачи</summary>
+
+        <h3>Что нужно сделать</h3>
+        <p>
+          Разработайте структуру базы данных для небольшой предметной
+          области (на выбор: «Кинотека», «Склад», «Учебный план»).
+          Все шаги выполняются полностью в Red Expert — без ручного
+          написания DDL там, где задачу решает визуальный редактор.
+        </p>
+
+        <h3>Семь шагов проекта</h3>
+        <ol style="margin: 0.5rem 0 0.75rem 1.25rem; padding: 0;">
+          <li>Создайте новую базу данных (или новую схему в учебной БД).</li>
+          <li>Спроектируйте ER-диаграмму.</li>
+          <li>Создайте таблицы, первичные и внешние ключи, индексы.</li>
+          <li>Создайте хранимую процедуру и триггер.</li>
+          <li>Наполните таблицы тестовыми данными (не менее 10 записей в главной таблице).</li>
+          <li>Создайте пользователя с ограниченными правами и продемонстрируйте работу ограничений.</li>
+          <li>Сгенерируйте итоговый DDL-скрипт и экспортируйте его.</li>
+        </ol>
+
+        <h3>Форма отчёта</h3>
+        <p>
+          Файл рабочей тетради с заполненными разделами, скриншотами
+          ключевых экранов и итоговым DDL-скриптом. Экспорт отчёта —
+          кнопкой <strong>«Печать / PDF»</strong> внизу страницы.
+        </p>
+
+        <h3>Что будет оцениваться</h3>
+        <div class="criteria-list">
+          <span>Полнота схемы и все 7 шагов</span>
+          <span>Корректность связей и ключей</span>
+          <span>Работа процедуры и триггера</span>
+          <span>Объём и осмысленность тестовых данных</span>
+          <span>Работа ограничений у пользователя</span>
+          <span>Качество DDL и скриншотов</span>
+        </div>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">
+          Подробные критерии — в приложении
+          <a href="../appendices/criteria.html">«Критерии оценивания»</a>.
+        </p>
+      </details>
+
+      <!-- ================= Шаг 0. Предметная область ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">0</span>
+          <h2>Выбор предметной области</h2>
+        </div>
+        <p>
+          Выберите одну из трёх предметных областей и кратко обоснуйте выбор.
+        </p>
+
+        <label>Предметная область
+          <select class="theme-select" data-save="m9_theme">
+            <option value="">— выберите —</option>
+            <option value="cinema">Кинотека</option>
+            <option value="warehouse">Склад</option>
+            <option value="curriculum">Учебный план</option>
+          </select>
+        </label>
+
+        <label>Почему выбрали именно эту область
+          <textarea data-save="m9_theme_reason"
+                    placeholder="Например: Кинотека — интересна предметно, есть естественные связи «фильм — жанр — сеанс — зритель»"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Шаг 1. Создание БД ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">1</span>
+          <h2>Создание новой базы данных</h2>
+        </div>
+        <p>
+          Создайте новую базу данных (или новую схему в учебной БД).
+          Зафиксируйте параметры.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: имя файла БД лучше делать осмысленным, например
+          <code>cinema.fdb</code>, <code>warehouse.fdb</code> или
+          <code>curriculum.fdb</code>. Кодировку выбирайте <code>UTF8</code>,
+          если не указано иное.
+        </div>
+
+        <label>Имя базы данных
+          <input type="text" class="inline-input" data-save="m9_s1_dbname" placeholder="cinema.fdb">
+        </label>
+
+        <label>Путь к файлу БД на сервере
+          <input type="text" class="inline-input" data-save="m9_s1_path" placeholder="C:\DB\cinema.fdb">
+        </label>
+
+        <label>Кодировка и пользователь
+          <input type="text" class="inline-input" data-save="m9_s1_charset" placeholder="UTF8, SYSDBA">
+        </label>
+
+        <label>Скриншот окна создания базы данных
+          <input type="file" accept="image/*" data-preview="m9_s1_img">
+        </label>
+        <div class="preview" id="preview-m9_s1_img"></div>
+      </section>
+
+      <!-- ================= Шаг 2. ER-диаграмма ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">2</span>
+          <h2>ER-диаграмма</h2>
+        </div>
+        <p>
+          Спроектируйте ER-диаграмму выбранной предметной области.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: начните с 4–6 ключевых сущностей. Пример для «Кинотеки»:
+          <em>Фильм</em>, <em>Жанр</em>, <em>Сеанс</em>, <em>Зал</em>,
+          <em>Зритель</em>, <em>Билет</em>.
+        </div>
+
+        <label>Перечень сущностей и связей
+          <textarea data-save="m9_s2_entities" style="min-height: 130px;"
+                    placeholder="FILM (ID, TITLE, YEAR, GENRE_ID)&#10;GENRE (ID, NAME)&#10;SESSION (ID, FILM_ID, HALL_ID, START_TIME)&#10;HALL (ID, NAME, SEATS)&#10;TICKET (ID, SESSION_ID, PRICE)&#10;Связи: GENRE 1:N FILM, FILM 1:N SESSION, HALL 1:N SESSION, SESSION 1:N TICKET"></textarea>
+        </label>
+
+        <label>Скриншот ER-диаграммы
+          <input type="file" accept="image/*" data-preview="m9_s2_img">
+        </label>
+        <div class="preview" id="preview-m9_s2_img"></div>
+      </section>
+
+      <!-- ================= Шаг 3. Таблицы, ключи, индексы ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">3</span>
+          <h2>Таблицы, первичные и внешние ключи, индексы</h2>
+        </div>
+        <p>
+          Создайте таблицы, первичные и внешние ключи, индексы через
+          визуальный редактор.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: индекс имеет смысл создавать по полям, которые часто
+          используются в <code>WHERE</code> и <code>JOIN</code>, —
+          например, по <code>FILM.GENRE_ID</code> или
+          <code>TICKET.SESSION_ID</code>.
+        </div>
+
+        <label>DDL-скрипт таблиц, ключей и индексов
+          <textarea class="sql tall" data-save="m9_s3_ddl"
+                    placeholder="CREATE TABLE GENRE (&#10;    ID INTEGER NOT NULL,&#10;    NAME VARCHAR(100),&#10;    CONSTRAINT PK_GENRE PRIMARY KEY (ID)&#10;);&#10;-- ..."></textarea>
+        </label>
+
+        <label>Перечень созданных объектов (таблицы, ключи, индексы)
+          <textarea data-save="m9_s3_objects" style="min-height: 110px;"
+                    placeholder="5 таблиц, 5 первичных ключей, 4 внешних ключа, 3 индекса"></textarea>
+        </label>
+
+        <label>Скриншот структуры таблиц в Red Expert
+          <input type="file" accept="image/*" data-preview="m9_s3_img">
+        </label>
+        <div class="preview" id="preview-m9_s3_img"></div>
+      </section>
+
+      <!-- ================= Шаг 4. Процедура и триггер ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">4</span>
+          <h2>Хранимая процедура и триггер</h2>
+        </div>
+        <p>
+          Создайте хранимую процедуру и триггер, осмысленные для предметной
+          области.
+        </p>
+
+        <div class="hint-box">
+          Примеры: процедура «количество билетов на сеанс» или
+          «общая выручка за день»; триггер «при вставке билета уменьшить
+          число свободных мест на сеансе».
+        </div>
+
+        <label>Назначение процедуры и триггера
+          <textarea data-save="m9_s4_purpose"
+                    placeholder="Например: процедура считает число проданных билетов на сеанс; триггер BEFORE INSERT проверяет, что на сеансе есть свободные места"></textarea>
+        </label>
+
+        <label>DDL-скрипт процедуры и триггера
+          <textarea class="sql tall" data-save="m9_s4_ddl"
+                    placeholder="CREATE PROCEDURE TICKETS_FOR_SESSION (S_ID INTEGER)&#10;RETURNS (CNT INTEGER)&#10;AS&#10;BEGIN&#10;    SELECT COUNT(*) FROM TICKET WHERE SESSION_ID = :S_ID INTO :CNT;&#10;    SUSPEND;&#10;END&#10;^&#10;CREATE TRIGGER BI_TICKET FOR TICKET ... ^"></textarea>
+        </label>
+
+        <label>Результат выполнения процедуры и проверки триггера
+          <textarea data-save="m9_s4_result"
+                    placeholder="Например: процедура вернула CNT = 8 для SESSION_ID = 1; триггер отклонил вставку при отсутствии свободных мест"></textarea>
+        </label>
+
+        <label>Скриншот выполнения процедуры и/или срабатывания триггера
+          <input type="file" accept="image/*" data-preview="m9_s4_img">
+        </label>
+        <div class="preview" id="preview-m9_s4_img"></div>
+      </section>
+
+      <!-- ================= Шаг 5. Тестовые данные ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">5</span>
+          <h2>Тестовые данные</h2>
+        </div>
+        <p>
+          Наполните таблицы тестовыми данными — не менее 10 записей
+          в главной таблице.
+        </p>
+
+        <div class="warning-box">
+          <strong>Не забудьте порядок.</strong> Сначала заполняйте справочники
+          (жанры, залы), затем главные таблицы (фильмы, сеансы), и только
+          потом зависимые (билеты). Иначе внешние ключи вызовут ошибку.
+        </div>
+
+        <label>INSERT-скрипт с тестовыми данными
+          <textarea class="sql tall" data-save="m9_s5_data"
+                    placeholder="INSERT INTO GENRE (ID, NAME) VALUES (1, 'Драма');&#10;INSERT INTO GENRE (ID, NAME) VALUES (2, 'Комедия');&#10;-- ... не менее 10 записей в главной таблице"></textarea>
+        </label>
+
+        <label>Проверка количества записей (результат SELECT COUNT(*))
+          <textarea data-save="m9_s5_count" style="min-height: 80px;"
+                    placeholder="Например: FILM — 10, GENRE — 3, SESSION — 12, HALL — 2, TICKET — 25"></textarea>
+        </label>
+
+        <label>Скриншот SELECT * из главной таблицы
+          <input type="file" accept="image/*" data-preview="m9_s5_img">
+        </label>
+        <div class="preview" id="preview-m9_s5_img"></div>
+      </section>
+
+      <!-- ================= Шаг 6. Пользователь с правами ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">6</span>
+          <h2>Пользователь с ограниченными правами</h2>
+        </div>
+        <p>
+          Создайте пользователя с ограниченными правами и продемонстрируйте
+          работу ограничений.
+        </p>
+
+        <div class="warning-box">
+          <strong>Безопасность.</strong> Пароль в отчёт не записывается.
+          Укажите имя пользователя, перечень выданных прав и способ проверки.
+        </div>
+
+        <label>Имя пользователя
+          <input type="text" class="inline-input" data-save="m9_s6_user" placeholder="REPORT_READER">
+        </label>
+
+        <label>Выданные права
+          <textarea data-save="m9_s6_grants" style="min-height: 90px;"
+                    placeholder="Например: SELECT на FILM, GENRE; запрет на TICKET и SESSION"></textarea>
+        </label>
+
+        <label>Как проверили ограничения
+          <textarea data-save="m9_s6_check"
+                    placeholder="Например: подключился под пользователем — SELECT из FILM успешно, SELECT из TICKET — ошибка no permission"></textarea>
+        </label>
+
+        <label>Скриншот проверки прав
+          <input type="file" accept="image/*" data-preview="m9_s6_img">
+        </label>
+        <div class="preview" id="preview-m9_s6_img"></div>
+      </section>
+
+      <!-- ================= Шаг 7. Итоговый DDL ================= -->
+      <section class="task">
+        <div class="step-header">
+          <span class="step-num">7</span>
+          <h2>Итоговый DDL-скрипт</h2>
+        </div>
+        <p>
+          Сгенерируйте итоговый DDL-скрипт и экспортируйте его.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: в дереве подключений выберите базу данных →
+          <em>Сгенерировать DDL</em>. Сохраните файл с понятным именем
+          и приложите к отчёту.
+        </div>
+
+        <label>Фрагмент итогового DDL (первые 30–40 строк)
+          <textarea class="sql tall" data-save="m9_s7_ddl"
+                    placeholder="-- DDL для БД cinema.fdb&#10;CREATE TABLE GENRE ( ... );&#10;CREATE TABLE FILM ( ... );&#10;-- ..."></textarea>
+        </label>
+
+        <label>Имя файла итогового DDL
+          <input type="text" class="inline-input" data-save="m9_s7_filename" placeholder="ddl_cinema.sql">
+        </label>
+
+        <label>Перечень объектов, вошедших в DDL
+          <textarea data-save="m9_s7_objects" style="min-height: 90px;"
+                    placeholder="5 таблиц, 5 PK, 4 FK, 3 индекса, 1 процедура, 1 триггер"></textarea>
+        </label>
+
+        <label>Скриншот окна генерации DDL
+          <input type="file" accept="image/*" data-preview="m9_s7_img">
+        </label>
+        <div class="preview" id="preview-m9_s7_img"></div>
+      </section>
+
+      <!-- ================= Финальная сдача проекта ================= -->
+      <section class="task final-block" data-task="m9_t1">
+        <h2>Сдача проекта</h2>
+        <p>
+          Отметьте пункты, которые выполнены. После этого поставьте галочку
+          «Проект выполнен и сдан» — прогресс модуля обновится.
+        </p>
+
+        <ul class="checklist">
+          <li>Выбрана предметная область, создана новая база данных.</li>
+          <li>Построена ER-диаграмма с 4+ сущностями и связями.</li>
+          <li>Созданы таблицы, первичные и внешние ключи, индексы.</li>
+          <li>Созданы и проверены хранимая процедура и триггер.</li>
+          <li>Таблицы наполнены тестовыми данными (главная — не менее 10 записей).</li>
+          <li>Создан пользователь с ограниченными правами, ограничения проверены.</li>
+          <li>Сгенерирован итоговый DDL-скрипт и сохранён файл.</li>
+        </ul>
+
+        <label>Самооценка и комментарии к проекту
+          <textarea data-save="m9_summary" style="min-height: 110px;"
+                    placeholder="Что получилось лучше всего, что вызвало сложности, что хотели бы доработать"></textarea>
+        </label>
+
+        <label class="done" style="font-size: 0.95rem; padding: 0.55rem 1rem;">
+          <input type="checkbox" data-progress="m9_t1">
+          Проект выполнен и сдан
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module8.html">← Модуль 8. Импорт и экспорт</a>
+        <a href="../index.html">На главную →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

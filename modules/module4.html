@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 4. Редактор SQL-запросов — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 4: SELECT, форматирование, автодополнение, параметризованные запросы и анализ плана выполнения в Red Expert.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    .optional-badge {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #8a6d00;
+      background: #fff8e6;
+      border: 1px solid #e0c26a;
+      border-radius: 999px;
+      vertical-align: middle;
+    }
+    textarea.sql {
+      min-height: 130px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .compare-grid label {
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html" class="active">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 4
+      </nav>
+
+      <h1>Модуль 4. Редактор SQL-запросов: базовые и продвинутые возможности</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Научиться писать, форматировать, выполнять и анализировать
+          SQL-запросы.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m4">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 4 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Панель инструментов редактора</h3>
+        <ul>
+          <li><strong>Выполнение запроса</strong> — запускает текущий запрос или выделенный фрагмент.</li>
+          <li><strong>Форматирование</strong> — автоматически расставляет отступы и переносы, делая запрос читабельным.</li>
+          <li><strong>Автодополнение</strong> (обычно <code>Ctrl+Space</code>) — подсказывает имена таблиц, полей и ключевые слова.</li>
+          <li><strong>Комментарии</strong> — быстрый способ закомментировать строку или блок (<code>--</code> и <code>/* ... */</code>).</li>
+        </ul>
+
+        <h3>Панель вывода и вкладка Result Set</h3>
+        <ul>
+          <li>
+            <strong>Result Set</strong> — таблица с результатом <code>SELECT</code>:
+            строки, столбцы, типы данных. Здесь удобно просматривать и
+            экспортировать данные.
+          </li>
+          <li>
+            <strong>Панель Вывод</strong> — служебные сообщения: количество
+            затронутых строк, ошибки, время выполнения, предупреждения.
+          </li>
+        </ul>
+
+        <h3>Параметризованные запросы и история</h3>
+        <p>
+          Параметризованный запрос содержит параметр (например,
+          <code>WHERE CITY = :city</code>), значение которого подставляется
+          при выполнении. Это удобно для многократных запросов с разными
+          значениями. История запросов сохраняет ранее выполненные команды
+          и позволяет быстро к ним возвращаться.
+        </p>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Для длинных запросов сначала пишите «черновик»
+          в одну строку, затем нажимайте кнопку форматирования — так проще
+          заметить ошибки в структуре <code>JOIN</code> и <code>WHERE</code>.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m4_t1">
+        <h2>Задание 1. Простой SELECT</h2>
+        <p>
+          Напишите запрос к таблице учебной БД (например,
+          <code>SELECT * FROM CLIENT</code>). Выполните его и сохраните
+          результат в отчёт.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: сначала выполните <code>SELECT * FROM CLIENT</code>,
+          затем усложните запрос — выберите 3–4 конкретных поля и добавьте
+          <code>ORDER BY</code>.
+        </div>
+
+        <label>SQL-запрос
+          <textarea class="sql" data-save="m4_t1_query"
+                    placeholder="SELECT * FROM CLIENT;"></textarea>
+        </label>
+
+        <label>Краткое описание результата (сколько строк, какие поля)
+          <textarea data-save="m4_t1_result"
+                    placeholder="Например: 12 строк, поля ID, NAME, PHONE, CITY"></textarea>
+        </label>
+
+        <label>Скриншот вкладки Result Set
+          <input type="file" accept="image/*" data-preview="m4_t1_img">
+        </label>
+        <div class="preview" id="preview-m4_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m4_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m4_t2">
+        <h2>Задание 2. Форматирование и автодополнение</h2>
+        <p>
+          Введите сложный запрос с несколькими <code>JOIN</code>. Используйте
+          кнопку форматирования и автодополнение (<code>Ctrl+Space</code>).
+          Оцените, насколько улучшилась читаемость.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: для демонстрации можно взять запрос вида
+          <code>CLIENT JOIN PHONE ON ... JOIN CITY ON ...</code> или
+          аналогичный по вашей учебной БД.
+        </div>
+
+        <label>Запрос до форматирования
+          <textarea class="sql" data-save="m4_t2_before"
+                    placeholder="SELECT c.NAME, p.PHONE FROM CLIENT c JOIN PHONE p ON p.CLIENT_ID = c.ID;"
+                    style="min-height: 80px;"></textarea>
+        </label>
+
+        <label>Запрос после форматирования
+          <textarea class="sql" data-save="m4_t2_after"
+                    placeholder="SELECT&#10;    c.NAME,&#10;    p.PHONE&#10;FROM CLIENT c&#10;JOIN PHONE p ON p.CLIENT_ID = c.ID;"></textarea>
+        </label>
+
+        <label>Что подсказало автодополнение и как изменилась читаемость
+          <textarea data-save="m4_t2_comment"
+                    placeholder="Например: автодополнение подсказало имена полей после ввода c.; после форматирования JOIN читаются по строкам"></textarea>
+        </label>
+
+        <label>Скриншот запроса после форматирования
+          <input type="file" accept="image/*" data-preview="m4_t2_img">
+        </label>
+        <div class="preview" id="preview-m4_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m4_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m4_t3">
+        <h2>Задание 3. Параметризованный запрос</h2>
+        <p>
+          Создайте запрос с параметром (например,
+          <code>WHERE CITY = :city</code>). Выполните его, подставив разные
+          значения.
+        </p>
+
+        <label>SQL-запрос с параметром
+          <textarea class="sql" data-save="m4_t3_query"
+                    placeholder="SELECT * FROM CLIENT WHERE CITY = :city;"></textarea>
+        </label>
+
+        <div class="compare-grid">
+          <label>Значение параметра №1 и результат
+            <textarea data-save="m4_t3_value1"
+                      placeholder="city = 'Москва' → 5 строк"></textarea>
+          </label>
+          <label>Значение параметра №2 и результат
+            <textarea data-save="m4_t3_value2"
+                      placeholder="city = 'Казань' → 2 строки"></textarea>
+          </label>
+        </div>
+
+        <label>Скриншот выполнения параметризованного запроса
+          <input type="file" accept="image/*" data-preview="m4_t3_img">
+        </label>
+        <div class="preview" id="preview-m4_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m4_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 4 ================= -->
+      <section class="task" data-task="m4_t4">
+        <h2>Задание 4. Анализ плана запроса <span class="optional-badge">продвинутый уровень</span></h2>
+        <p>
+          Включите отображение плана выполнения и сравните стоимость двух
+          вариантов одного и того же запроса (с индексом и без).
+        </p>
+
+        <label>Запрос с фильтром по полю, для которого нет индекса
+          <textarea class="sql" data-save="m4_t4_no_index_query"
+                    placeholder="SELECT * FROM CLIENT WHERE CITY = 'Москва';"></textarea>
+        </label>
+
+        <label>План выполнения без индекса (стоимость, тип сканирования)
+          <textarea data-save="m4_t4_no_index_plan" style="min-height: 100px;"
+                    placeholder="Например: PLAN (CLIENT NATURAL), cost = 250"></textarea>
+        </label>
+
+        <label>Запрос после создания индекса по полю CITY
+          <textarea class="sql" data-save="m4_t4_with_index_query"
+                    placeholder="CREATE INDEX IDX_CLIENT_CITY ON CLIENT(CITY);&#10;SELECT * FROM CLIENT WHERE CITY = 'Москва';"></textarea>
+        </label>
+
+        <label>План выполнения с индексом (стоимость, тип сканирования)
+          <textarea data-save="m4_t4_with_index_plan" style="min-height: 100px;"
+                    placeholder="Например: PLAN (CLIENT INDEX (IDX_CLIENT_CITY)), cost = 3"></textarea>
+        </label>
+
+        <label>Вывод: как изменилась стоимость и почему
+          <textarea data-save="m4_t4_conclusion"
+                    placeholder="Например: стоимость снизилась с 250 до 3, так как вместо полного сканирования используется индекс"></textarea>
+        </label>
+
+        <label>Скриншот плана выполнения (до и/или после)
+          <input type="file" accept="image/*" data-preview="m4_t4_img">
+        </label>
+        <div class="preview" id="preview-m4_t4_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m4_t4">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Контрольные вопросы ================= -->
+      <section class="questions">
+        <h2>Контрольные вопросы</h2>
+
+        <label>1. Чем отличается панель Result Set от панели Вывод?
+          <textarea data-save="m4_q1"
+                    placeholder="Опишите: Result Set — таблица с данными, Вывод — служебные сообщения, ошибки, время выполнения"></textarea>
+        </label>
+
+        <label>2. Как в Red Expert сохранить историю выполненных запросов?
+          <textarea data-save="m4_q2"
+                    placeholder="Опишите: где находится история, как её включить и как вернуться к ранее выполненному запросу"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к заданию или обратитесь к приложению «Горячие клавиши».
+        </p>
+        <ul class="checklist">
+          <li>Умею писать и выполнять простой <code>SELECT</code>.</li>
+          <li>Пользуюсь кнопкой форматирования и автодополнением (<code>Ctrl+Space</code>).</li>
+          <li>Понимаю, как работают параметризованные запросы.</li>
+          <li>Различаю вкладку Result Set и панель Вывод.</li>
+          <li>Знаю, как включить отображение плана выполнения.</li>
+          <li>Понимаю, почему индекс снижает стоимость запроса.</li>
+          <li>Умею находить ранее выполненные запросы в истории.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m4_check"
+                    placeholder="Например: 'Dynamic SQL Error: Token unknown' → проверить запятую или пропущенное ключевое слово"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module3.html">← Модуль 3. Интерфейс и навигация</a>
+        <a href="module5.html">Модуль 5. Объекты БД →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

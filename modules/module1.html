@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 1. Введение в Red Expert — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 1: назначение Red Expert, установка, первичная настройка и изучение панели инструментов.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html" class="active">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 1
+      </nav>
+
+      <h1>Модуль 1. Введение в Red Expert и подготовка рабочего места</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Сформировать представление о назначении инструмента и подготовить его
+          к работе.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m1">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 3 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Что такое Red Expert</h3>
+        <p>
+          <strong>Red Expert</strong> — это GUI-оболочка на Java для работы
+          с <strong>Firebird</strong> и <strong>Ред База Данных</strong>,
+          не зависящая от операционной системы. Благодаря Java инструмент
+          одинаково работает на Windows, Linux и macOS.
+        </p>
+
+        <h3>Основные возможности</h3>
+        <ul>
+          <li>визуальный редактор объектов базы данных;</li>
+          <li>SQL-редактор с подсветкой синтаксиса и автодополнением;</li>
+          <li>построение ER-диаграмм и reverse engineering существующей БД;</li>
+          <li>трассировка (Trace Manager) для мониторинга действий в БД;</li>
+          <li>управление пользователями, ролями и правами доступа.</li>
+        </ul>
+
+        <h3>Требования</h3>
+        <p>
+          Наличие <strong>JDK</strong>: для старых версий Red Expert — не ниже
+          <code>JDK 1.8</code>, для актуальных — <code>JDK 21</code>.
+        </p>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Перед установкой проверьте версию Java командой
+          <code>java -version</code> в терминале. Если версия ниже требуемой,
+          установите подходящий JDK с сайта разработчика.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m1_t1">
+        <h2>Задание 1. Установка и запуск</h2>
+        <p>
+          Установите Red Expert на доступную ОС (Windows/Linux). Запустите
+          приложение и зафиксируйте версию в отчёте.
+        </p>
+
+        <label>Версия Red Expert, ОС и версия JDK
+          <textarea data-save="m1_t1_answer"
+                    placeholder="Например: Red Expert 2024.10, Windows 11, JDK 21.0.2"></textarea>
+        </label>
+
+        <label>Скриншот главного окна после запуска
+          <input type="file" accept="image/*" data-preview="m1_t1_img">
+        </label>
+        <div class="preview" id="preview-m1_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m1_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m1_t2">
+        <h2>Задание 2. Первичная настройка</h2>
+        <p>
+          Откройте меню <em>Инструменты → Настройки</em>. Установите русский
+          язык интерфейса (если доступен), проверьте параметры шрифта в редакторе
+          SQL и настройте отображение панели подключений.
+        </p>
+
+        <label>Какие настройки вы изменили и почему
+          <textarea data-save="m1_t2_answer"
+                    placeholder="Опишите: язык интерфейса, размер шрифта, видимость панели подключений"></textarea>
+        </label>
+
+        <label>Скриншот окна настроек
+          <input type="file" accept="image/*" data-preview="m1_t2_img">
+        </label>
+        <div class="preview" id="preview-m1_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m1_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m1_t3">
+        <h2>Задание 3. Изучение панели инструментов</h2>
+        <p>
+          Соотнесите кнопки на панели инструментов с их горячими клавишами
+          (например, <em>Новый документ — Shift+F12</em>,
+          <em>Сохранить — Ctrl+S</em>).
+        </p>
+
+        <label>Таблица соответствия «кнопка — горячая клавиша»
+          <textarea data-save="m1_t3_answer" style="min-height: 130px;"
+                    placeholder="Новый документ — Shift+F12&#10;Сохранить — Ctrl+S&#10;Выполнить запрос — F5&#10;..."></textarea>
+        </label>
+
+        <label>Скриншот панели инструментов
+          <input type="file" accept="image/*" data-preview="m1_t3_img">
+        </label>
+        <div class="preview" id="preview-m1_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m1_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Контрольные вопросы ================= -->
+      <section class="questions">
+        <h2>Контрольные вопросы</h2>
+
+        <label>1. На каких языках программирования и почему написан Red Expert?
+          <textarea data-save="m1_q1"
+                    placeholder="Опишите: Java, кроссплатформенность, JVM..."></textarea>
+        </label>
+
+        <label>2. Какие СУБД поддерживаются инструментом «из коробки»?
+          <textarea data-save="m1_q2"
+                    placeholder="Перечислите СУБД и кратко поясните"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к глоссарию.
+        </p>
+        <ul class="checklist">
+          <li>Знаю, что такое Red Expert и для каких СУБД он предназначен.</li>
+          <li>Установил Red Expert и успешно запустил его.</li>
+          <li>Проверил версию JDK и при необходимости установил нужную.</li>
+          <li>Настроил интерфейс под себя (язык, шрифт, панели).</li>
+          <li>Ориентируюсь в панели инструментов и знаю основные горячие клавиши.</li>
+          <li>Понимаю, какие объекты БД можно редактировать визуально.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m1_check"
+                    placeholder="Например: при запуске — ошибка 'Java not found' → установить JDK 21 и прописать JAVA_HOME"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="../index.html">← На главную</a>
+        <a href="module2.html">Модуль 2. Подключение к БД →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

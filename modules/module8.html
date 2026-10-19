@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 8. Импорт, экспорт и скрипты — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 8: экспорт данных в CSV и SQL, выполнение скриптов из файла, генерация DDL из метаданных в Red Expert.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    textarea.sql {
+      min-height: 130px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+    textarea.csv {
+      min-height: 110px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      line-height: 1.5;
+      white-space: pre;
+      overflow-x: auto;
+      background: var(--bg-soft);
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .compare-grid label {
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+    .warning-box {
+      background: #fff8e6;
+      border-left: 4px solid #e0a800;
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+    }
+    .warning-box strong {
+      color: #8a6d00;
+    }
+    .steps-list {
+      margin: 0.5rem 0 1rem 1.25rem;
+      padding: 0;
+      font-size: 0.92rem;
+    }
+    .steps-list li {
+      margin-bottom: 0.35rem;
+    }
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.35rem 1rem;
+      margin: 0.5rem 0 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+    .format-grid span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--green-900);
+    }
+    .format-grid span::before {
+      content: "•";
+      color: var(--green-600);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html" class="active">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 8
+      </nav>
+
+      <h1>Модуль 8. Импорт, экспорт и выполнение скриптов</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Научиться переносить данные и выполнять пакетные операции.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m8">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 3 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Экспорт результатов SELECT-запроса</h3>
+        <p>
+          Результат запроса можно сохранить в разных форматах. Основные из них:
+        </p>
+        <div class="format-grid">
+          <span>CSV — обмен с таблицами</span>
+          <span>Excel (XLSX) — отчёты</span>
+          <span>SQL-вставки (INSERT) — перенос данных</span>
+          <span>HTML — предпросмотр в браузере</span>
+          <span>JSON — обмен с приложениями</span>
+          <span>XML — интеграция с системами</span>
+        </div>
+        <p>
+          В Red Expert экспорт обычно доступен из контекстного меню вкладки
+          <em>Result Set</em> или через кнопку на панели результатов.
+        </p>
+
+        <h3>Выполнение SQL-скриптов из файла</h3>
+        <p>
+          Компонент выполнения скриптов позволяет выбрать SQL-файл и выполнить
+          его целиком или по частям. Это удобно для массовых вставок,
+          развёртывания схемы и переноса данных между базами.
+        </p>
+
+        <h3>Генерация DDL из метаданных</h3>
+        <p>
+          Red Expert умеет формировать полный DDL-скрипт по существующей
+          базе данных: <code>CREATE TABLE</code>, <code>CREATE INDEX</code>,
+          <code>CREATE TRIGGER</code>, <code>CREATE PROCEDURE</code> и т.д.
+          Такой скрипт — ценный артефакт: его можно сохранить для итогового
+          проекта, резервной копии схемы или переноса БД на другой сервер.
+        </p>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Перед массовым выполнением скрипта сделайте
+          резервную копию базы данных. Ошибка в одном <code>INSERT</code>
+          может испортить данные, а откатить большие изменения сложно.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m8_t1">
+        <h2>Задание 1. Экспорт данных</h2>
+        <p>
+          Выполните запрос к таблице <code>STUDENT</code> и экспортируйте
+          результат в CSV и в SQL-скрипт (<code>INSERT</code>). Сравните
+          форматы.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: выполните <code>SELECT * FROM STUDENT;</code>,
+          затем в панели результатов найдите команду экспорта и выберите
+          сначала <em>CSV</em>, затем <em>SQL-вставки</em>. Сохраните оба
+          файла — их содержимое можно скопировать в поля ниже.
+        </div>
+
+        <label>SQL-запрос, результат которого экспортировали
+          <textarea class="sql" data-save="m8_t1_query" style="min-height: 80px;"
+                    placeholder="SELECT * FROM STUDENT;"></textarea>
+        </label>
+
+        <div class="compare-grid">
+          <label>Фрагмент CSV-файла (2–3 строки)
+            <textarea class="csv" data-save="m8_t1_csv"
+                      placeholder="ID,NAME,BIRTH_DATE&#10;1,Иванов Иван,2003-05-14&#10;2,Петрова Анна,2004-02-01"></textarea>
+          </label>
+          <label>Фрагмент SQL-скрипта (INSERT, 2–3 строки)
+            <textarea class="sql" data-save="m8_t1_sql"
+                      placeholder="INSERT INTO STUDENT (ID, NAME, BIRTH_DATE) VALUES (1, 'Иванов Иван', '2003-05-14');&#10;INSERT INTO STUDENT (ID, NAME, BIRTH_DATE) VALUES (2, 'Петрова Анна', '2004-02-01');"></textarea>
+          </label>
+        </div>
+
+        <label>Сравнение форматов: в чём разница и когда что удобнее
+          <textarea data-save="m8_t1_compare" style="min-height: 110px;"
+                    placeholder="Например: CSV компактнее и удобен для Excel, но не содержит типов; SQL-вставки готовы к выполнению и сохраняют имена полей, но занимают больше места"></textarea>
+        </label>
+
+        <label>Скриншоты экспорта (CSV и SQL)
+          <input type="file" accept="image/*" data-preview="m8_t1_img">
+        </label>
+        <div class="preview" id="preview-m8_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m8_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m8_t2">
+        <h2>Задание 2. Выполнение скрипта</h2>
+        <p>
+          Создайте текстовый файл с несколькими <code>INSERT</code>-запросами
+          для таблицы <code>STUDENT</code>. Выполните его через компонент
+          выполнения скриптов. Проверьте, что данные добавились.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: сохраните файл с расширением <code>.sql</code> в кодировке
+          <code>UTF-8</code>. В Red Expert откройте компонент выполнения
+          скриптов, выберите файл и запустите. Затем выполните
+          <code>SELECT * FROM STUDENT;</code> и убедитесь, что новые строки
+          появились.
+        </div>
+
+        <div class="warning-box">
+          <strong>Важно.</strong> Не используйте в <code>INSERT</code>-скрипте
+          <code>ID</code>, которые уже есть в таблице, — это вызовет ошибку
+          нарушения первичного ключа. Возьмите свободные значения или используйте
+          генератор.
+        </div>
+
+        <ol class="steps-list">
+          <li>Создайте файл <code>inserts.sql</code> с 3–5 <code>INSERT</code>-запросами.</li>
+          <li>Сохраните его в кодировке UTF-8.</li>
+          <li>Выполните файл через компонент выполнения скриптов.</li>
+          <li>Проверьте результат запросом <code>SELECT * FROM STUDENT;</code>.</li>
+        </ol>
+
+        <label>Содержимое вашего SQL-файла
+          <textarea class="sql" data-save="m8_t2_script"
+                    placeholder="INSERT INTO STUDENT (ID, NAME, BIRTH_DATE) VALUES (101, 'Сидоров Пётр', '2002-11-03');&#10;INSERT INTO STUDENT (ID, NAME, BIRTH_DATE) VALUES (102, 'Кузнецова Мария', '2003-07-21');&#10;INSERT INTO STUDENT (ID, NAME, BIRTH_DATE) VALUES (103, 'Орлов Дмитрий', '2001-04-09');"></textarea>
+        </label>
+
+        <label>Результат проверки (сколько строк добавилось, что видно в SELECT)
+          <textarea data-save="m8_t2_result"
+                    placeholder="Например: добавилось 3 строки, в SELECT видны записи с ID 101–103; ошибок не возникло"></textarea>
+        </label>
+
+        <label>Скриншот выполнения скрипта и результата
+          <input type="file" accept="image/*" data-preview="m8_t2_img">
+        </label>
+        <div class="preview" id="preview-m8_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m8_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m8_t3">
+        <h2>Задание 3. Генерация DDL</h2>
+        <p>
+          Сгенерируйте полный DDL-скрипт для учебной базы данных. Сохраните
+          его как артефакт для итогового проекта.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: в дереве подключений выберите базу данных →
+          <em>Сгенерировать DDL</em> (или <em>Экспорт метаданных</em>
+          в меню инструментов). Сохраните файл <code>.sql</code> — он
+          понадобится в модуле 9.
+        </div>
+
+        <div class="warning-box">
+          <strong>Артефакт итогового проекта.</strong> Этот DDL-скрипт нужно
+          будет приложить к отчёту по модулю 9. Сохраните его в отдельный файл
+          с понятным именем, например <code>ddl_учебная_БД.sql</code>.
+        </div>
+
+        <label>Фрагмент сгенерированного DDL-скрипта (первые 20–30 строк)
+          <textarea class="sql" data-save="m8_t3_ddl" style="min-height: 180px;"
+                    placeholder="CREATE TABLE CLIENT (&#10;    ID INTEGER NOT NULL,&#10;    NAME VARCHAR(100),&#10;    ...&#10;);&#10;CREATE TABLE PHONE ( ... );&#10;..."></textarea>
+        </label>
+
+        <label>Какие типы объектов вошли в скрипт
+          <textarea data-save="m8_t3_objects"
+                    placeholder="Например: 5 таблиц, 3 индекса, 2 триггера, 1 процедура, 1 генератор"></textarea>
+        </label>
+
+        <label>Имя файла, под которым сохранили DDL
+          <input type="text" data-save="m8_t3_filename" placeholder="ddl_учебная_БД.sql"
+                 style="display: block; width: 100%; margin-top: 0.35rem; padding: 0.55rem 0.75rem; font-family: var(--font-mono); font-size: 0.9rem; background: var(--bg-soft); border: 1px solid var(--green-200); border-radius: var(--radius-sm);">
+        </label>
+
+        <label>Скриншот окна генерации DDL
+          <input type="file" accept="image/*" data-preview="m8_t3_img">
+        </label>
+        <div class="preview" id="preview-m8_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m8_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к глоссарию.
+        </p>
+        <ul class="checklist">
+          <li>Умею экспортировать результат SELECT в CSV.</li>
+          <li>Умею экспортировать результат SELECT в SQL-вставки (INSERT).</li>
+          <li>Понимаю, чем отличаются форматы CSV и SQL и когда какой удобнее.</li>
+          <li>Умею выполнять SQL-скрипт из файла через компонент выполнения.</li>
+          <li>Умею проверять результат выполнения скрипта через SELECT.</li>
+          <li>Умею генерировать полный DDL-скрипт из метаданных БД.</li>
+          <li>Сохранил DDL-скрипт как артефакт для итогового проекта.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m8_check"
+                    placeholder="Например: 'violation of PRIMARY or UNIQUE KEY constraint' → в INSERT используется уже занятый ID; 'Dynamic SQL Error' → проверить кодировку файла и синтаксис"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module7.html">← Модуль 7. Пользователи и трассировка</a>
+        <a href="module9.html">Модуль 9. Итоговый проект →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

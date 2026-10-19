@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 5. Работа с объектами БД — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 5: создание и изменение объектов БД через визуальный редактор Red Expert — таблицы, индексы, триггеры, хранимые процедуры.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    textarea.sql {
+      min-height: 130px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .compare-grid label {
+      margin: 0;
+    }
+    @media (max-width: 700px) {
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+    .object-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.35rem 1rem;
+      margin: 0.5rem 0 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+    .object-types span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--green-900);
+    }
+    .object-types span::before {
+      content: "•";
+      color: var(--green-600);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html" class="active">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 5
+      </nav>
+
+      <h1>Модуль 5. Работа с объектами базы данных через визуальный редактор</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Освоить создание и изменение основных объектов БД без написания
+          DDL-скриптов вручную.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m5">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 5 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Визуальный редактор объектов</h3>
+        <p>
+          Red Expert предоставляет визуальный редактор для всех основных
+          объектов базы данных. Создавать и изменять их можно через формы,
+          без ручного написания DDL-скриптов:
+        </p>
+        <div class="object-types">
+          <span>Таблицы</span>
+          <span>Индексы</span>
+          <span>Генераторы</span>
+          <span>Процедуры</span>
+          <span>Триггеры</span>
+          <span>Представления</span>
+          <span>Домены</span>
+          <span>Исключения</span>
+          <span>Роли</span>
+        </div>
+        <p>
+          При сохранении объекта Red Expert сам формирует соответствующий
+          DDL-скрипт и выполняет его на сервере. Этот скрипт можно посмотреть
+          и сохранить — он пригодится в отчёте и итоговом проекте.
+        </p>
+
+        <h3>Создание объекта и его изменение (ALTER)</h3>
+        <ul>
+          <li>
+            <strong>Создание (CREATE)</strong> — объект появляется в базе
+            данных впервые. Задаются все его свойства: поля, типы, ключи,
+            индексы и т.д.
+          </li>
+          <li>
+            <strong>Изменение (ALTER)</strong> — меняются свойства уже
+            существующего объекта: добавляются или удаляются поля, меняются
+            типы, добавляются внешние ключи, индексы и триггеры.
+          </li>
+        </ul>
+        <p>
+          В визуальном редакторе Red Expert создание и изменение выполняются
+          в одной и той же форме: для нового объекта вы открываете диалог
+          создания, для существующего — диалог редактирования. Разница в том,
+          какой DDL-скрипт сгенерируется: <code>CREATE</code> или
+          <code>ALTER</code>.
+        </p>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Всегда сохраняйте сгенерированный DDL-скрипт
+          после каждого изменения. Это пригодится при сравнении схем, откате
+          изменений и подготовке итогового проекта.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m5_t1">
+        <h2>Задание 1. Создание таблицы</h2>
+        <p>
+          Создайте таблицу <code>STUDENT</code> с полями:
+          <code>ID</code> (целое, PK), <code>NAME</code> (varchar),
+          <code>BIRTH_DATE</code> (date). Используйте визуальный редактор,
+          а затем сгенерируйте DDL-скрипт и сохраните его в тетради.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: в дереве подключений щёлкните правой кнопкой по узлу
+          «Таблицы» → <em>Создать таблицу</em>. После сохранения откройте
+          вкладку с DDL-скриптом (кнопка <em>Показать DDL</em> или аналогичная)
+          и скопируйте его в поле ниже.
+        </div>
+
+        <label>DDL-скрипт создания таблицы STUDENT
+          <textarea class="sql" data-save="m5_t1_ddl"
+                    placeholder="CREATE TABLE STUDENT (&#10;    ID INTEGER NOT NULL,&#10;    NAME VARCHAR(100),&#10;    BIRTH_DATE DATE,&#10;    CONSTRAINT PK_STUDENT PRIMARY KEY (ID)&#10;);"></textarea>
+        </label>
+
+        <label>Что вызвало затруднения при создании (если были)
+          <textarea data-save="m5_t1_comment"
+                    placeholder="Например: не сразу нашёл, где задать первичный ключ"></textarea>
+        </label>
+
+        <label>Скриншот формы создания таблицы и/или DDL-скрипта
+          <input type="file" accept="image/*" data-preview="m5_t1_img">
+        </label>
+        <div class="preview" id="preview-m5_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m5_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m5_t2">
+        <h2>Задание 2. Изменение таблицы</h2>
+        <p>
+          Добавьте в созданную таблицу поле <code>EMAIL</code> и внешний
+          ключ на таблицу <code>GROUP</code>. Зафиксируйте изменения.
+        </p>
+
+        <div class="hint-box">
+          Если таблицы <code>GROUP</code> в учебной БД нет, создайте её
+          минимально (поля <code>ID</code> и <code>GROUP_NAME</code>) или
+          используйте существующую таблицу групп. Внешний ключ должен ссылаться
+          на её первичный ключ.
+        </div>
+
+        <label>DDL-скрипт изменения таблицы (ALTER)
+          <textarea class="sql" data-save="m5_t2_ddl"
+                    placeholder="ALTER TABLE STUDENT ADD EMAIL VARCHAR(100);&#10;ALTER TABLE STUDENT ADD CONSTRAINT FK_STUDENT_GROUP&#10;    FOREIGN KEY (GROUP_ID) REFERENCES GROUP(ID);"></textarea>
+        </label>
+
+        <label>Какие поля и ограничения добавлены
+          <textarea data-save="m5_t2_comment"
+                    placeholder="Например: добавлено поле EMAIL (varchar 100) и внешний ключ на GROUP(ID); пришлось сначала добавить поле GROUP_ID"></textarea>
+        </label>
+
+        <label>Скриншот формы редактирования таблицы
+          <input type="file" accept="image/*" data-preview="m5_t2_img">
+        </label>
+        <div class="preview" id="preview-m5_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m5_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m5_t3">
+        <h2>Задание 3. Создание индекса</h2>
+        <p>
+          Создайте индекс по полю <code>NAME</code>. Сравните время выполнения
+          запроса <code>SELECT * FROM STUDENT WHERE NAME = '...'</code>
+          до и после создания индекса.
+        </p>
+
+        <div class="hint-box">
+          Время выполнения отображается в панели «Вывод» после запуска запроса.
+          Для чистоты эксперимента выполните запрос 2–3 раза до и после
+          создания индекса и зафиксируйте типичное значение.
+        </div>
+
+        <label>DDL-скрипт создания индекса
+          <textarea class="sql" data-save="m5_t3_ddl" style="min-height: 80px;"
+                    placeholder="CREATE INDEX IDX_STUDENT_NAME ON STUDENT(NAME);"></textarea>
+        </label>
+
+        <div class="compare-grid">
+          <label>Время выполнения до индекса
+            <textarea data-save="m5_t3_before"
+                      placeholder="Например: 0,12 с, план — NATURAL"></textarea>
+          </label>
+          <label>Время выполнения после индекса
+            <textarea data-save="m5_t3_after"
+                      placeholder="Например: 0,01 с, план — INDEX (IDX_STUDENT_NAME)"></textarea>
+          </label>
+        </div>
+
+        <label>Вывод: как изменилось время и почему
+          <textarea data-save="m5_t3_conclusion"
+                    placeholder="Например: время снизилось примерно в 10 раз, так как вместо полного сканирования используется индекс"></textarea>
+        </label>
+
+        <label>Скриншот выполнения запроса (до и/или после)
+          <input type="file" accept="image/*" data-preview="m5_t3_img">
+        </label>
+        <div class="preview" id="preview-m5_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m5_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 4 ================= -->
+      <section class="task" data-task="m5_t4">
+        <h2>Задание 4. Создание триггера</h2>
+        <p>
+          Создайте простой триггер <code>BEFORE INSERT</code>, который
+          автоматически заполняет поле <code>CREATED_AT</code> текущей датой.
+        </p>
+
+        <div class="hint-box">
+          Если поля <code>CREATED_AT</code> в таблице <code>STUDENT</code>
+          ещё нет — сначала добавьте его через визуальный редактор
+          (тип <code>TIMESTAMP</code> или <code>DATE</code>), затем создавайте
+          триггер.
+        </div>
+
+        <label>DDL-скрипт создания триггера
+          <textarea class="sql" data-save="m5_t4_ddl"
+                    placeholder="CREATE TRIGGER BI_STUDENT FOR STUDENT&#10;ACTIVE BEFORE INSERT POSITION 0&#10;AS&#10;BEGIN&#10;    IF (NEW.CREATED_AT IS NULL) THEN&#10;        NEW.CREATED_AT = CURRENT_TIMESTAMP;&#10;END"></textarea>
+        </label>
+
+        <label>Как проверили, что триггер работает
+          <textarea data-save="m5_t4_check"
+                    placeholder="Например: вставил строку без CREATED_AT — поле заполнилось текущей датой"></textarea>
+        </label>
+
+        <label>Скриншот формы создания триггера и/или результата
+          <input type="file" accept="image/*" data-preview="m5_t4_img">
+        </label>
+        <div class="preview" id="preview-m5_t4_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m5_t4">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 5 ================= -->
+      <section class="task" data-task="m5_t5">
+        <h2>Задание 5. Создание хранимой процедуры</h2>
+        <p>
+          Напишите процедуру, возвращающую количество студентов в заданной
+          группе. Выполните её через компонент выполнения хранимых процедур.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: для Firebird процедура может выглядеть так —
+          <code>CREATE PROCEDURE STUDENTS_IN_GROUP (GRP_ID INTEGER) RETURNS (CNT INTEGER) AS BEGIN SELECT COUNT(*) FROM STUDENT WHERE GROUP_ID = :GRP_ID INTO :CNT; SUSPEND; END</code>.
+          Адаптируйте под фактические поля вашей таблицы.
+        </div>
+
+        <label>DDL-скрипт создания процедуры
+          <textarea class="sql" data-save="m5_t5_ddl"
+                    placeholder="CREATE PROCEDURE STUDENTS_IN_GROUP (GRP_ID INTEGER)&#10;RETURNS (CNT INTEGER)&#10;AS&#10;BEGIN&#10;    SELECT COUNT(*) FROM STUDENT WHERE GROUP_ID = :GRP_ID INTO :CNT;&#10;    SUSPEND;&#10;END"></textarea>
+        </label>
+
+        <label>Как выполнили процедуру и какой результат получили
+          <textarea data-save="m5_t5_result"
+                    placeholder="Например: выполнил через компонент выполнения процедур, передал GRP_ID = 1, получил CNT = 5"></textarea>
+        </label>
+
+        <label>Скриншот выполнения процедуры
+          <input type="file" accept="image/*" data-preview="m5_t5_img">
+        </label>
+        <div class="preview" id="preview-m5_t5_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m5_t5">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Контрольные вопросы ================= -->
+      <section class="questions">
+        <h2>Контрольные вопросы</h2>
+
+        <label>1. Какие типы объектов доступны в визуальном редакторе Red Expert?
+          <textarea data-save="m5_q1"
+                    placeholder="Перечислите: таблицы, индексы, генераторы, процедуры, триггеры, представления, домены, исключения, роли..."></textarea>
+        </label>
+
+        <label>2. Можно ли изменить тип поля существующей таблицы через визуальный редактор? Если да, то какие ограничения существуют?
+          <textarea data-save="m5_q2"
+                    placeholder="Опишите: да, можно; ограничения — потеря данных при сужении типа, зависимые объекты (индексы, триггеры, процедуры), ограничения Firebird"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к глоссарию.
+        </p>
+        <ul class="checklist">
+          <li>Умею создавать таблицу через визуальный редактор.</li>
+          <li>Понимаю разницу между CREATE и ALTER.</li>
+          <li>Умею добавлять поля и внешние ключи в существующую таблицу.</li>
+          <li>Знаю, как создать индекс и как оценить его эффект по времени выполнения.</li>
+          <li>Умею создавать триггер BEFORE INSERT и проверять его работу.</li>
+          <li>Умею создавать и выполнять хранимую процедуру.</li>
+          <li>Сохраняю сгенерированные DDL-скрипты для отчёта и итогового проекта.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m5_check"
+                    placeholder="Например: 'violation of FOREIGN KEY constraint' → значение внешнего ключа отсутствует в родительской таблице"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module4.html">← Модуль 4. Редактор SQL-запросов</a>
+        <a href="module6.html">Модуль 6. ER-диаграммы →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

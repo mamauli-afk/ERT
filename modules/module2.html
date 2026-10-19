@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 2. Подключение к базе данных — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 2: параметры подключения к БД в Red Expert, диагностика ошибок, SSH-туннель и подготовка учебной БД «Телефонный справочник».">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили для таблицы параметров подключения и блока подготовки БД. -->
+  <style>
+    .params-table input[type="text"],
+    .params-table input[type="password"] {
+      display: block;
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: var(--text);
+      background: var(--bg-soft);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .params-table input[type="text"]:focus,
+    .params-table input[type="password"]:focus {
+      background: #fff;
+      border-color: var(--green-600);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+    }
+    .params-table td:first-child {
+      font-weight: 600;
+      color: var(--green-900);
+      white-space: nowrap;
+      width: 28%;
+    }
+    .optional-badge {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 0.1rem 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #8a6d00;
+      background: #fff8e6;
+      border: 1px solid #e0c26a;
+      border-radius: 999px;
+      vertical-align: middle;
+    }
+
+    /* Блок подготовки учебной БД */
+    .setup-block {
+      border: 2px solid var(--green-500);
+      background: linear-gradient(180deg, var(--green-50), #ffffff);
+    }
+    .setup-block h2 {
+      color: var(--green-900);
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .setup-block h3 {
+      font-size: 1rem;
+      color: var(--green-800);
+      margin: 1.1rem 0 0.5rem;
+    }
+    .download-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.9rem 1.1rem;
+      margin: 0.75rem 0 0.5rem;
+      background: var(--green-100);
+      border: 1px dashed var(--green-500);
+      border-radius: var(--radius);
+    }
+    .download-box .btn {
+      flex: 0 0 auto;
+    }
+    .download-box .note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      flex: 1 1 240px;
+    }
+    .steps-list {
+      margin: 0.5rem 0 1rem 1.25rem;
+      padding: 0;
+      font-size: 0.93rem;
+    }
+    .steps-list li {
+      margin-bottom: 0.5rem;
+    }
+    .steps-list code {
+      background: #fff;
+    }
+    .warning-box {
+      background: #fff8e6;
+      border-left: 4px solid #e0a800;
+      border-radius: var(--radius-sm);
+      padding: 0.7rem 1rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.9rem;
+    }
+    .warning-box strong {
+      color: #8a6d00;
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html" class="active">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 2
+      </nav>
+
+      <h1>Модуль 2. Подключение к базе данных и создание подключения</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Научиться устанавливать соединение с существующей базой данных
+          и создавать новую.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m2">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 3 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Параметры подключения</h3>
+        <ul>
+          <li><strong>Сервер</strong> — хост и порт, на котором работает Firebird / Ред База Данных (например, <code>localhost:3050</code>).</li>
+          <li><strong>Путь к файлу базы данных</strong> — полный путь к <code>.fdb</code> на сервере (например, <code>C:\DB\phonebook.fdb</code> или <code>/var/lib/firebird/phonebook.fdb</code>).</li>
+          <li><strong>Пользователь и пароль</strong> — учётные данные СУБД (по умолчанию <code>SYSDBA</code> / <code>masterkey</code>, но в учебной БД пароль может быть изменён).</li>
+          <li><strong>Кодировка</strong> — например, <code>UTF8</code> или <code>WIN1251</code>; должна совпадать с кодировкой базы данных.</li>
+          <li><strong>Драйвер JDBC</strong> — библиотека <code>jaybird</code>, через которую Red Expert взаимодействует с Firebird.</li>
+        </ul>
+
+        <h3>Одновременная работа с несколькими подключениями</h3>
+        <p>
+          Red Expert позволяет держать открытыми несколько подключений
+          к разным базам данных одновременно. Переключение между ними
+          выполняется в дереве подключений; для каждого подключения
+          открывается своя рабочая область.
+        </p>
+
+        <h3>Расширенные параметры</h3>
+        <ul>
+          <li><strong>SSH-туннель</strong> — позволяет подключаться к удалённому серверу Firebird через SSH-соединение без прямого доступа к порту СУБД.</li>
+          <li><strong>Шифрование сетевого соединения</strong> — настройки TLS/SSL для защиты передаваемых данных.</li>
+        </ul>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Перед созданием подключения убедитесь, что сервер
+          Firebird запущен, а путь к файлу БД указан именно с точки зрения
+          сервера (не клиента). Типичная ошибка новичка — указать локальный путь
+          вместо серверного.
+        </div>
+      </details>
+
+      <!-- ================= Подготовка учебной БД ================= -->
+      <section class="task setup-block">
+        <h2>📦 Подготовка учебной базы данных «Телефонный справочник»</h2>
+        <p>
+          Все задания модулей 2–8 выполняются на единой учебной базе данных
+          «Телефонный справочник». Чтобы приступить к работе, скачайте скрипт
+          создания БД и выполните его в Red Expert — скрипт создаст все нужные
+          таблицы, представления, триггеры, процедуры, роли и тестовые данные.
+        </p>
+
+        <div class="download-box">
+          <a href="../downloads/phonebook.sql" download class="btn">
+            ⬇ Скачать скрипт phonebook.sql
+          </a>
+          <span class="note">
+            Содержит 5 таблиц (CITY, CLIENT, PHONE, PHONE_TYPE, CONTACT_GROUP),
+            4 процедуры, 3 представления, 6 триггеров, 2 роли и тестовые данные
+            (15 клиентов, 26 телефонов). Формат — SQL-текст, кодировка UTF-8.
+          </span>
+        </div>
+
+        <h3>Как выполнить скрипт в Red Expert</h3>
+        <ol class="steps-list">
+          <li>
+            <strong>Создайте базу данных.</strong> В Red Expert:
+            <em>База данных → Создать</em>. Укажите путь к файлу
+            <code>phonebook.fdb</code>, кодировку <code>UTF8</code>,
+            пользователя <code>SYSDBA</code> и пароль <code>5</code>
+          </li>
+          <li>
+            <strong>Откройте SQL-редактор</strong> для этого подключения
+            (правой кнопкой по подключению → <em>SQL-редактор</em>,
+            либо через панель инструментов).
+          </li>
+          <li>
+            <strong>Вставьте весь скрипт целиком</strong> в редактор:
+            откройте скачанный <code>phonebook.sql</code> любым текстовым
+            редактором (Notepad, VS Code), скопируйте всё содержимое
+            и вставьте в Red Expert.
+          </li>
+          <li>
+            <strong>Выполните как скрипт.</strong> Используйте кнопку
+            <em>Выполнить скрипт</em> (Execute Script) или соответствующее
+            сочетание из меню — а не просто <em>Выполнить запрос</em>.
+            Так корректно обработаются блоки <code>SET TERM ^ ;</code>
+            в процедурах и триггерах.
+          </li>
+          <li>
+            <strong>Проверьте результат.</strong> Выполните запрос:
+            <code>SELECT * FROM CLIENT ORDER BY LAST_NAME;</code> —
+            должно вернуться 15 строк.
+          </li>
+        </ol>
+
+        <div class="warning-box">
+          <strong>Важно: строка CONNECT в начале скрипта.</strong>
+          В некоторых версиях скрипта первая строка содержит команду вида
+          <code>CONNECT 'localhost/3050:C:/Users/.../PHONEBOOK.FDB' USER 'sysdba' PASSWORD '...'</code>.
+          Эта строка содержит путь и пароль с компьютера, где скрипт
+          создавался, и на вашем компьютере вызовет ошибку.
+          <br><br>
+          <strong>Что делать:</strong> откройте файл в текстовом редакторе,
+          найдите строку, начинающуюся с <code>CONNECT</code>, и либо
+          <strong>удалите</strong> её целиком, либо <strong>закомментируйте</strong>,
+          поставив в начале <code>--</code>. Скрипт будет выполняться
+          в том подключении, которое уже открыто в Red Expert, и
+          строка <code>CONNECT</code> ему не нужна.
+        </div>
+
+        <div class="warning-box">
+          <strong>Если при выполнении возникла ошибка триггера
+          «BU_CLIENT».</strong> В экспортированных скриптах иногда
+          встречается ситуация, когда триггер сначала создаётся
+          как <code>BEFORE INSERT</code> (пустая заглушка), а затем
+          переопределяется как <code>BEFORE UPDATE</code>. Firebird
+          в некоторых версиях не позволяет менять тип триггера через
+          <code>CREATE OR ALTER</code>. Если увидели ошибку —
+          выполните вручную:
+          <br><br>
+          <code>DROP TRIGGER BU_CLIENT;</code>
+          <br>
+          а затем повторно запустите скрипт с шага 4. Все остальные
+          объекты уже будут созданы и повторно не продублируются
+          благодаря <code>CREATE OR ALTER</code>.
+        </div>
+
+        <div class="hint-box">
+          <strong>Проверка после выполнения.</strong> В дереве подключений
+          должны появиться все типы объектов: таблицы, представления,
+          процедуры, триггеры, индексы, домены, генераторы (sequences),
+          исключения, роли. Это и есть материал для задания 1
+          (изучение дерева подключений) и всех последующих модулей.
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+          Если скрипт уже выполнен ранее и база данных существует —
+          повторно запускать его не нужно, сразу переходите к заданиям.
+          Для чистой переустановки создайте новый файл <code>.fdb</code>
+          или выполните DROP-команды из раздела 12 скрипта.
+        </p>
+      </section>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m2_t1">
+        <h2>Задание 1. Создание нового подключения</h2>
+        <p>
+          Используя тестовую базу данных «Телефонный справочник», создайте
+          подключение в Red Expert. Заполните таблицу параметров ниже —
+          это и будет ваш отчёт.
+        </p>
+
+        <table class="params-table">
+          <thead>
+            <tr>
+              <th>Параметр</th>
+              <th>Значение в вашем подключении</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Сервер (хост:порт)</td>
+              <td><input type="text" data-save="m2_t1_server" placeholder="localhost:3050"></td>
+            </tr>
+            <tr>
+              <td>Путь к файлу БД</td>
+              <td><input type="text" data-save="m2_t1_path" placeholder="C:\DB\phonebook.fdb"></td>
+            </tr>
+            <tr>
+              <td>Пользователь</td>
+              <td><input type="text" data-save="m2_t1_user" placeholder="SYSDBA"></td>
+            </tr>
+            <tr>
+              <td>Кодировка</td>
+              <td><input type="text" data-save="m2_t1_charset" placeholder="UTF8"></td>
+            </tr>
+            <tr>
+              <td>Драйвер JDBC</td>
+              <td><input type="text" data-save="m2_t1_jdbc" placeholder="Jaybird 5.x"></td>
+            </tr>
+            <tr>
+              <td>Имя подключения в Red Expert</td>
+              <td><input type="text" data-save="m2_t1_name" placeholder="Учебная БД — Телефонный справочник"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <label>Пароль в отчёт не записывается — укажите только тип учётной записи
+          <textarea data-save="m2_t1_note"
+                    placeholder="Например: SYSDBA с паролем, выданным преподавателем; подключение успешно установлено"></textarea>
+        </label>
+
+        <label>Скриншот окна создания подключения
+          <input type="file" accept="image/*" data-preview="m2_t1_img">
+        </label>
+        <div class="preview" id="preview-m2_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m2_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m2_t2">
+        <h2>Задание 2. Диагностика ошибок</h2>
+        <p>
+          Смоделируйте ошибку подключения (неверный пароль или путь).
+          Опишите текст сообщения об ошибке и способ её устранения.
+        </p>
+
+        <label>Что вы изменили, чтобы вызвать ошибку
+          <textarea data-save="m2_t2_cause"
+                    placeholder="Например: указал неверный пароль пользователя SYSDBA"></textarea>
+        </label>
+
+        <label>Текст сообщения об ошибке
+          <textarea data-save="m2_t2_error"
+                    placeholder="Скопируйте или перепечатайте сообщение из окна Red Expert"></textarea>
+        </label>
+
+        <label>Способ устранения
+          <textarea data-save="m2_t2_fix"
+                    placeholder="Например: вернул корректный пароль, проверил раскладку и Caps Lock"></textarea>
+        </label>
+
+        <label>Скриншот окна с ошибкой
+          <input type="file" accept="image/*" data-preview="m2_t2_img">
+        </label>
+        <div class="preview" id="preview-m2_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m2_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 (опционально) ================= -->
+      <section class="task" data-task="m2_t3">
+        <h2>Задание 3. Настройка SSH-туннеля <span class="optional-badge">опционально</span></h2>
+        <p>
+          Для продвинутого уровня: настройте подключение через SSH-туннель
+          к удалённому серверу.
+        </p>
+
+        <label>Параметры SSH-туннеля
+          <textarea data-save="m2_t3_params" style="min-height: 120px;"
+                    placeholder="SSH-хост: ...&#10;SSH-порт: 22&#10;SSH-пользователь: ...&#10;Локальный порт: 3050&#10;Удалённый хост: ..."></textarea>
+        </label>
+
+        <label>Результат проверки подключения через туннель
+          <textarea data-save="m2_t3_result"
+                    placeholder="Например: подключение установлено, тестовый запрос выполнен успешно"></textarea>
+        </label>
+
+        <label>Скриншот настроек SSH-туннеля
+          <input type="file" accept="image/*" data-preview="m2_t3_img">
+        </label>
+        <div class="preview" id="preview-m2_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m2_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Контрольные вопросы ================= -->
+      <section class="questions">
+        <h2>Контрольные вопросы</h2>
+
+        <label>1. Чем отличается создание новой базы данных от создания нового подключения к уже существующей?
+          <textarea data-save="m2_q1"
+                    placeholder="Опишите: создание БД — это новый файл .fdb и служебные структуры; подключение — это лишь соединение с уже существующим файлом"></textarea>
+        </label>
+
+        <label>2. Где в Red Expert настраивается драйвер JDBC для подключения?
+          <textarea data-save="m2_q2"
+                    placeholder="Опишите: где задаётся путь к драйверу (jaybird), например в настройках подключения или общих настройках инструмента"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к глоссарию.
+        </p>
+        <ul class="checklist">
+          <li>Успешно выполнил скрипт учебной БД «Телефонный справочник».</li>
+          <li>Понимаю разницу между созданием новой БД и созданием подключения.</li>
+          <li>Знаю назначение каждого параметра подключения (сервер, путь, пользователь, кодировка, драйвер).</li>
+          <li>Умею создавать подключение к учебной БД и проверять его.</li>
+          <li>Могу диагностировать типовую ошибку подключения и устранить её.</li>
+          <li>Знаю, для чего используется SSH-туннель и когда он нужен.</li>
+          <li>Понимаю, что Red Expert поддерживает несколько одновременных подключений.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m2_check"
+                    placeholder="Например: 'connection refused' → проверить, запущен ли сервер Firebird и порт 3050; при выполнении скрипта — удалить строку CONNECT"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module1.html">← Модуль 1. Введение в Red Expert</a>
+        <a href="module3.html">Модуль 3. Интерфейс и навигация →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

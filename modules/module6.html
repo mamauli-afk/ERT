@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Модуль 6. Проектирование структуры БД — ЭРТ по Red Expert</title>
+  <meta name="description" content="Модуль 6: построение ER-диаграмм в Red Expert, reverse engineering, экспорт и сравнение схем.">
+  <link rel="stylesheet" href="../assets/css/style.css">
+
+  <!-- Локальные стили только для этой страницы. -->
+  <style>
+    textarea.sql {
+      min-height: 130px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      line-height: 1.55;
+      white-space: pre;
+      overflow-x: auto;
+      tab-size: 2;
+    }
+    .hint-box {
+      background: var(--green-50);
+      border: 1px dashed var(--green-300);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.9rem;
+      margin: 0.5rem 0 0.75rem;
+      font-size: 0.88rem;
+      color: var(--green-900);
+    }
+    .hint-box code {
+      background: #fff;
+    }
+    .steps-list {
+      margin: 0.5rem 0 1rem 1.25rem;
+      padding: 0;
+      font-size: 0.92rem;
+    }
+    .steps-list li {
+      margin-bottom: 0.35rem;
+    }
+    .entity-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.35rem 1rem;
+      margin: 0.5rem 0 1rem;
+      padding: 0.75rem 1rem;
+      background: var(--green-50);
+      border: 1px solid var(--green-200);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+    .entity-grid span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--green-900);
+    }
+    .entity-grid span::before {
+      content: "•";
+      color: var(--green-600);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= Шапка ================= -->
+  <header class="topbar">
+    <a href="../index.html" class="logo">ЭРТ по Red Expert</a>
+    <nav>
+      <a href="../index.html">Главная</a>
+      <a href="../instructions.html">Инструкция</a>
+      <a href="../index.html#modules" class="active">Модули</a>
+      <a href="../index.html#appendices">Приложения</a>
+    </nav>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================= Боковое меню ================= -->
+    <aside class="sidebar">
+      <h2>Модули</h2>
+      <ol>
+        <li><a href="module1.html">1. Введение в Red Expert</a></li>
+        <li><a href="module2.html">2. Подключение к БД</a></li>
+        <li><a href="module3.html">3. Интерфейс и навигация</a></li>
+        <li><a href="module4.html">4. Редактор SQL-запросов</a></li>
+        <li><a href="module5.html">5. Объекты БД</a></li>
+        <li><a href="module6.html" class="active">6. ER-диаграммы</a></li>
+        <li><a href="module7.html">7. Пользователи и трассировка</a></li>
+        <li><a href="module8.html">8. Импорт и экспорт</a></li>
+        <li><a href="module9.html">9. Итоговый проект</a></li>
+      </ol>
+
+      <h2 style="margin-top: 1.25rem;">Приложения</h2>
+      <ol>
+        <li><a href="../appendices/glossary.html">Глоссарий</a></li>
+        <li><a href="../appendices/reference.html">Горячие клавиши</a></li>
+        <li><a href="../appendices/checklist.html">Чек-лист</a></li>
+        <li><a href="../appendices/criteria.html">Критерии</a></li>
+      </ol>
+    </aside>
+
+    <!-- ================= Основной контент ================= -->
+    <main>
+
+      <nav class="breadcrumbs">
+        <a href="../index.html">Главная</a> →
+        <a href="../index.html#modules">Модули</a> →
+        Модуль 6
+      </nav>
+
+      <h1>Модуль 6. Проектирование структуры БД с помощью ER-диаграмм</h1>
+
+      <!-- Цель -->
+      <section class="goal">
+        <h2>Цель</h2>
+        <p>
+          Научиться визуализировать и проектировать схему базы данных.
+        </p>
+      </section>
+
+      <!-- Прогресс модуля -->
+      <div class="progress" data-module-progress="m6">
+        <div class="progress-label">
+          <span>Прогресс модуля</span>
+          <span>0 из 3 (0%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-bar"></div>
+        </div>
+      </div>
+
+      <!-- Теория -->
+      <details class="theory" open>
+        <summary>Краткий теоретический блок</summary>
+
+        <h3>Построитель ER-диаграмм</h3>
+        <p>
+          Встроенный построитель ER-диаграмм Red Expert позволяет
+          визуализировать структуру базы данных и проектировать новую схему.
+          Основные режимы работы:
+        </p>
+        <ul>
+          <li>
+            <strong>Создание новой диаграммы</strong> — вы «с нуля» добавляете
+            таблицы, поля и связи, а Red Expert генерирует соответствующий
+            DDL-скрипт.
+          </li>
+          <li>
+            <strong>«Реверс-инжиниринг»</strong> — построение диаграммы
+            по уже существующей базе данных: инструмент считывает метаданные
+            и рисует схему автоматически.
+          </li>
+          <li>
+            <strong>Экспорт</strong> — сохранение диаграммы в виде изображения
+            (PNG, SVG) или в виде DDL-скрипта для переноса схемы.
+          </li>
+        </ul>
+
+        <h3>Управление таблицами на диаграмме</h3>
+        <ul>
+          <li><strong>Добавление</strong> — новая таблица с полями, типами и ключами.</li>
+          <li><strong>Связывание</strong> — проведение связи между таблицами (1:1, 1:N, N:M) с выбором типа и полей.</li>
+          <li><strong>Редактирование</strong> — изменение полей, ключей и существующих связей прямо на диаграмме.</li>
+        </ul>
+
+        <h3>Сравнение схем</h3>
+        <p>
+          Инструмент сравнения метаданных (compare) позволяет сопоставить
+          две схемы — например, исходную учебную БД и её изменённую версию —
+          и показать различия: добавленные и удалённые объекты, изменения
+          полей и ключей. Результат сравнения удобно использовать в отчёте.
+        </p>
+
+        <div class="tip" style="margin-top: 0.75rem;">
+          <strong>Совет.</strong> Начинайте проектирование с 3–4 ключевых
+          сущностей предметной области и связей между ними. Так проще
+          избежать избыточных таблиц и запутанных связей.
+        </div>
+      </details>
+
+      <!-- ================= Задание 1 ================= -->
+      <section class="task" data-task="m6_t1">
+        <h2>Задание 1. «Реверс-инжиниринг»</h2>
+        <p>
+          Постройте ER-диаграмму для учебной базы данных. Сохраните её
+          в формате изображения (PNG/SVG) и вставьте в рабочую тетрадь.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: в дереве подключений выберите узел базы данных →
+          <em>ER-диаграмма</em> → <em>«Реверс-инжиниринг»</em>
+          (или <em>Создать по существующей БД</em> в меню инструмента).
+          После построения используйте команду экспорта диаграммы
+          в изображение.
+        </div>
+
+        <ol class="steps-list">
+          <li>Откройте учебную БД и запустите построитель ER-диаграмм.</li>
+          <li>Выполните «Реверс-инжиниринг» схемы.</li>
+          <li>Сохраните диаграмму в формате PNG или SVG.</li>
+          <li>Прикрепите изображение в поле ниже.</li>
+        </ol>
+
+        <label>Краткое описание диаграммы (сущности и связи)
+          <textarea data-save="m6_t1_description"
+                    placeholder="Например: 5 таблиц — CLIENT, PHONE, CITY, GROUP, STUDENT; основные связи — CLIENT 1:N PHONE, CITY 1:N CLIENT"></textarea>
+        </label>
+
+        <label>Скриншот ER-диаграммы (PNG/SVG)
+          <input type="file" accept="image/*" data-preview="m6_t1_img">
+        </label>
+        <div class="preview" id="preview-m6_t1_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m6_t1">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 2 ================= -->
+      <section class="task" data-task="m6_t2">
+        <h2>Задание 2. Создание новой диаграммы</h2>
+        <p>
+          Создайте ER-диаграмму для гипотетической предметной области
+          (например, «Библиотека»). Добавьте 3–4 таблицы и связи между ними.
+          Сгенерируйте DDL-скрипт из диаграммы.
+        </p>
+
+        <div class="hint-box">
+          Пример набора сущностей для предметной области «Библиотека»:
+        </div>
+        <div class="entity-grid">
+          <span>Читатель (Reader)</span>
+          <span>Книга (Book)</span>
+          <span>Автор (Author)</span>
+          <span>Выдача (Loan)</span>
+        </div>
+
+        <label>Перечень таблиц и связей вашей диаграммы
+          <textarea data-save="m6_t2_tables" style="min-height: 120px;"
+                    placeholder="Reader (ID, NAME, EMAIL)&#10;Book (ID, TITLE, AUTHOR_ID)&#10;Author (ID, NAME)&#10;Loan (ID, BOOK_ID, READER_ID, LOAN_DATE)&#10;Связи: Author 1:N Book, Reader 1:N Loan, Book 1:N Loan"></textarea>
+        </label>
+
+        <label>DDL-скрипт, сгенерированный из диаграммы
+          <textarea class="sql" data-save="m6_t2_ddl"
+                    placeholder="CREATE TABLE READER (&#10;    ID INTEGER NOT NULL,&#10;    NAME VARCHAR(100),&#10;    EMAIL VARCHAR(100),&#10;    CONSTRAINT PK_READER PRIMARY KEY (ID)&#10;);&#10;-- ..."></textarea>
+        </label>
+
+        <label>Скриншот ER-диаграммы новой предметной области
+          <input type="file" accept="image/*" data-preview="m6_t2_img">
+        </label>
+        <div class="preview" id="preview-m6_t2_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m6_t2">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Задание 3 ================= -->
+      <section class="task" data-task="m6_t3">
+        <h2>Задание 3. Сравнение схем</h2>
+        <p>
+          Используя инструмент сравнения метаданных, сравните схему учебной
+          БД с изменённой версией. Опишите обнаруженные различия.
+        </p>
+
+        <div class="hint-box">
+          Подсказка: подготовьте «изменённую версию» учебной БД — например,
+          добавьте одно поле в таблицу, создайте индекс и внешний ключ
+          (можно взять результаты модуля 5). Затем откройте инструмент
+          сравнения метаданных и укажите обе схемы.
+        </div>
+
+        <label>Что вы изменили в схеме для сравнения
+          <textarea data-save="m6_t3_changes"
+                    placeholder="Например: добавил поле EMAIL в STUDENT, создал индекс по NAME, добавил внешний ключ на GROUP"></textarea>
+        </label>
+
+        <label>Различия, обнаруженные инструментом сравнения
+          <textarea data-save="m6_t3_diff" style="min-height: 120px;"
+                    placeholder="Добавлено: STUDENT.EMAIL, индекс IDX_STUDENT_NAME, внешний ключ FK_STUDENT_GROUP&#10;Удалено: —&#10;Изменено: —"></textarea>
+        </label>
+
+        <label>Вывод: как инструмент помогает контролировать изменения схемы
+          <textarea data-save="m6_t3_conclusion"
+                    placeholder="Например: сравнение позволяет вовремя заметить расхождения между версиями БД и корректно перенести изменения на рабочую среду"></textarea>
+        </label>
+
+        <label>Скриншот результатов сравнения
+          <input type="file" accept="image/*" data-preview="m6_t3_img">
+        </label>
+        <div class="preview" id="preview-m6_t3_img"></div>
+
+        <label class="done">
+          <input type="checkbox" data-progress="m6_t3">
+          Задание выполнено
+        </label>
+      </section>
+
+      <!-- ================= Самопроверка ================= -->
+      <section class="task" style="margin-top: 1.75rem;">
+        <h2>Самопроверка по модулю</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Отметьте пункты, которые вы уверенно освоили. Если что-то не получается —
+          вернитесь к соответствующему заданию или обратитесь к глоссарию.
+        </p>
+        <ul class="checklist">
+          <li>Понимаю, что такое ER-диаграмма и зачем она нужна.</li>
+          <li>Умею строить ER-диаграмму методом reverse engineering.</li>
+          <li>Умею создавать новую диаграмму «с нуля» и добавлять связи.</li>
+          <li>Могу экспортировать диаграмму в изображение (PNG/SVG).</li>
+          <li>Умею генерировать DDL-скрипт из диаграммы.</li>
+          <li>Умею пользоваться инструментом сравнения метаданных и описывать различия.</li>
+        </ul>
+        <label>Типовые ошибки и способы их решения
+          <textarea data-save="m6_check"
+                    placeholder="Например: диаграмма не строится — проверить, что выбрано именно подключение к БД, а не отдельная таблица"></textarea>
+        </label>
+      </section>
+
+      <!-- ================= Кнопки ================= -->
+      <div class="actions">
+        <button data-save-all>Сохранить</button>
+        <button data-print>Печать / PDF</button>
+        <button data-export>Экспорт JSON</button>
+        <button class="secondary" data-reset>Сбросить данные</button>
+      </div>
+
+      <!-- ================= Навигация ================= -->
+      <nav class="pager">
+        <a href="module5.html">← Модуль 5. Объекты БД</a>
+        <a href="module7.html">Модуль 7. Пользователи и трассировка →</a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>
