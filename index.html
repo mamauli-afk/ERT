@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Электронная рабочая тетрадь — Red Expert</title>
   <meta name="description" content="Электронная рабочая тетрадь для освоения подключения к базе данных, SQL-запросов и работы с объектами БД в Red Expert.">
+  <meta name="author" content="Автор: Дешина И.А., преподаватель ОГАПОУ «Алексеевский колледж»">
   <link rel="stylesheet" href="assets/css/style.css">
 
   <!-- Небольшая локальная доработка: текстовые поля «Данные студента».
@@ -56,13 +57,46 @@
       font-size: 0.85rem;
       color: var(--text-muted);
     }
+
+    /* ==== Подпись автора ==== */
+    /* Цвет наследуется от логотипа «ЭРТ по Red Expert» */
+    .logo small {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-top: 0.15rem;
+      color: inherit;          /* тот же цвет, что у «ЭРТ по Red Expert» */
+      opacity: 1;
+    }
+    .logo small .author-label {
+      font-weight: 700;        /* «Автор:» — жирным */
+    }
+
+    /* Автор в hero — тоже наследует цвет родителя */
+    .author-note {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+      color: inherit;
+    }
+
+    /* Автор в подвале — тем же цветом, что у логотипа */
+    .footer .footer-author {
+      color: inherit;
+    }
+    .footer .footer-author .author-label {
+      font-weight: 700;        /* «Автор:» — жирным */
+    }
   </style>
 </head>
 <body>
 
   <!-- ================= Шапка ================= -->
   <header class="topbar">
-    <a href="index.html" class="logo">ЭРТ по Red Expert</a>
+    <a href="index.html" class="logo">
+      ЭРТ по Red Expert
+      <small><span class="author-label">Автор:</span> Дешина И.А., преподаватель ОГАПОУ «Алексеевский колледж»</small>
+    </a>
     <nav>
       <a href="index.html" class="active">Главная</a>
       <a href="instructions.html">Инструкция</a>
@@ -79,6 +113,9 @@
       <section class="hero">
         <span class="badge">Электронная рабочая тетрадь</span>
         <h1>Red Expert: подключение, SQL-запросы и объекты БД</h1>
+        <p class="author-note">
+          <span class="author-label">Автор:</span> <strong>Дешина И.А.</strong>, преподаватель ОГАПОУ «Алексеевский колледж»
+        </p>
         <p>
           Практикум для студентов IT-направлений, начинающих администраторов
           баз данных и разработчиков, переходящих на Firebird / Ред База Данных.
@@ -227,7 +264,8 @@
     </main>
 
     <footer class="footer">
-      Электронная рабочая тетрадь по Red Expert · 2026
+      Электронная рабочая тетрадь по Red Expert · 2026<br>
+      <span class="footer-author"><span class="author-label">Автор:</span> Дешина И.А., преподаватель ОГАПОУ «Алексеевский колледж»</span>
     </footer>
   </div>
 
